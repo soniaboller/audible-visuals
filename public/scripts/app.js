@@ -16,7 +16,7 @@ function init(){
     document.body.appendChild(renderer.domElement);
 
     camera = new THREE.PerspectiveCamera(fov, width/height, 0.1, 2000);
-    camera.position.set(0,37,300);
+    camera.position.set(0,37,250);
 
     renderer.setClearColor(0x000000, 1);
     window.addEventListener('resize', function(){
@@ -82,10 +82,10 @@ function init(){
 
     function animate(){
         requestAnimationFrame(animate);
-        group.rotation.y += 0.01;
-        group2.rotation.y += 0.01;
-        group3.rotation.y += 0.01;
-        group4.rotation.y += 0.01;
+        group.rotation.y += 0.015;
+        group2.rotation.y += 0.015;
+        group3.rotation.y += 0.015;
+        group4.rotation.y += 0.015;
         // group.rotation.z += 0.01;
         // group2.rotation.z += 0.01;
         // group3.rotation.z += 0.01;
