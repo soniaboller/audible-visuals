@@ -11,7 +11,7 @@ function init(){
 
     var fov = 50;
 
-    renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer = new THREE.CanvasRenderer();
     renderer.setSize(width,height);
     document.body.appendChild(renderer.domElement);
 
@@ -36,14 +36,21 @@ function init(){
     var group4 = new THREE.Group();
     scene.add( group4 );
 
-    function randomColorGenerator(){
-        return Math.floor((Math.random() * 150) + 106);
-    }
+    // function randomColorGenerator(){
+    //     return Math.floor((Math.random() * 150) + 106);
+    // }
     // randomly generate color shades in hex
     // use different color for each quadrent
+
+    var PI2 = Math.PI * 2;
     for (var i = 0; i < 2500; i++){
         // var color = new THREE.Color(0,0,randomColorGenerator());
-        var material = new THREE.SpriteMaterial({color: 0xff00ff, fog: true});
+        var material = new THREE.SpriteCanvasMaterial({color: 0xff00ff, program: function ( context ) {
+            context.beginPath();
+            context.arc( 0, 0, 0.5, 0, PI2, true );
+            context.fill();
+
+        }});
         var particle = new THREE.Particle( material );
         particle.position.x = Math.random() * 250;
         particle.position.y = Math.random() * 150 - 75;
@@ -52,7 +59,12 @@ function init(){
     }
 
     for (var j = 0; j < 2500; j++){
-        var material2 = new THREE.SpriteMaterial({color: 0xffffff, fog: true});
+        var material2 = new THREE.SpriteCanvasMaterial({color: 0xffff00, program: function ( context ) {
+            context.beginPath();
+            context.arc( 0, 0, 0.5, 0, PI2, true );
+            context.fill();
+
+        }});
         var particle2 = new THREE.Particle( material2 );
         particle2.position.x = Math.random() * 250 - 250;
         particle2.position.y = Math.random() * 150 - 75;
@@ -61,7 +73,12 @@ function init(){
     }
 
     for (var k = 0; k < 2500; k++){
-        var material3 = new THREE.SpriteMaterial({color: 0xffff00, fog: true});
+        var material3 = new THREE.SpriteCanvasMaterial({color: 0x0000ff, program: function ( context ) {
+            context.beginPath();
+            context.arc( 0, 0, 0.5, 0, PI2, true );
+            context.fill();
+
+        }});
         var particle3 = new THREE.Particle( material3 );
         particle3.position.x = Math.random() * 250;
         particle3.position.y = Math.random() * 150 - 75;
@@ -70,7 +87,12 @@ function init(){
     }
 
     for (var l = 0; l < 2500; l++){
-        var material4 = new THREE.SpriteMaterial({color: 0x0000ff, fog: true});
+        var material4 = new THREE.SpriteCanvasMaterial({color: 0xfffff, program: function ( context ) {
+            context.beginPath();
+            context.arc( 0, 0, 0.5, 0, PI2, true );
+            context.fill();
+
+        }});
         var particle4 = new THREE.Particle( material4 );
         particle4.position.x = Math.random() * 250 - 250;
         particle4.position.y = Math.random() * 150 - 75;
@@ -82,10 +104,10 @@ function init(){
 
     function animate(){
         requestAnimationFrame(animate);
-        group.rotation.y += 0.015;
-        group2.rotation.y += 0.015;
-        group3.rotation.y += 0.015;
-        group4.rotation.y += 0.015;
+        group.rotation.y += 0.025;
+        group2.rotation.y += 0.025;
+        group3.rotation.y += 0.025;
+        group4.rotation.y += 0.025;
         // group.rotation.z += 0.01;
         // group2.rotation.z += 0.01;
         // group3.rotation.z += 0.01;
