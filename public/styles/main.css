@@ -2,5 +2,14 @@ body {
   padding: 0;
   margin: 0;
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
+canvas{
+  width: 100vw;
+  height: 100vh;
+}
+
+#audio-controls{
+  width: 100vw;
+}

@@ -1,8 +1,14 @@
 console.log('loaded');
 
 $(document).ready(function() {
+
     var scene, camera, renderer;
     init();
+
+    // particleSpace = 0.67
+    // particleHeight = 0.67
+    // cameraZ = 450
+    // cameraY = 150
 
     function init() {
         scene = new THREE.Scene();
@@ -17,7 +23,7 @@ $(document).ready(function() {
         document.body.appendChild(renderer.domElement);
 
         camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 2000);
-        camera.position.set(0, 100, 450);
+        camera.position.set(0, 0, 750);
 
         renderer.setClearColor(0xffffff, 1);
         window.addEventListener('resize', function () {
@@ -29,56 +35,26 @@ $(document).ready(function() {
         });
 
         particles = new Array();
-        // particles2 = new Array();
 
         var PI2 = Math.PI * 2;
         for (var i = 0; i <= 1024; i++) {
+
             var material = new THREE.SpriteCanvasMaterial({
                 color: 0x000000, program: function (context) {
                     context.beginPath();
                     context.arc(0, 0, 1, 0, PI2, true);
                     context.fill();
-
                 }
             });
             var particle = particles[ i ++ ] = new THREE.Particle(material);
-            if (i <= 256){
-                particle.position.x = Math.random() * 128 - 252;
+            if (i <= 1024){
+                particle.position.x = (i - 512) * 1.1;
                 particle.position.y = 0;
-                particle.position.z = Math.random() * 150;
-            }
-            else if (i > 256 && i <= 512) {
-                particle.position.x = Math.random() * 128 - 124;
-                particle.position.y = 0;
-                particle.position.z = Math.random() * 150;
-            }
-            else if (i > 512 && i <= 768){
-                particle.position.x = Math.random() * 128;
-                particle.position.y = 0;
-                particle.position.z = Math.random() * 150;
-            }
-            else{
-                particle.position.x = Math.random() * 128 + 124;
-                particle.position.y = 0;
-                particle.position.z = Math.random() * 150;
+                particle.position.z = 0;
+
             }
             scene.add(particle)
         }
-        // for (var j = 0; j < 1024; j++) {
-        //     var material2 = new THREE.SpriteCanvasMaterial({
-        //         color: 0xffffff, program: function (context) {
-        //             context.beginPath();
-        //             context.arc(0, 0, 0.5, 0, PI2, true);
-        //             context.fill();
-        //
-        //         }
-        //     });
-        //     var particle2 = particles2[ i ++ ] = new THREE.Particle(material2);
-        //     particle2.position.x = Math.random() * 150 - 150;
-        //     particle2.position.y = 0;
-        //     particle2.position.z = Math.random() * 250;
-        //     scene.add(particle2)
-        // }
 
         var ctx = new (window.AudioContext || window.webkitAudioContext)();
         console.log('audioCtx');
@@ -88,7 +64,7 @@ $(document).ready(function() {
         console.log('audio');
         console.log(audio);
 
-        var audioSrc = ctx.createMediaElementSource(myAudio);
+        var audioSrc = ctx.createMediaElementSource(audio);
         console.log(audioSrc);
 
         var analyser = ctx.createAnalyser();
@@ -98,24 +74,34 @@ $(document).ready(function() {
         audioSrc.connect(analyser);
         analyser.connect(ctx.destination);
 
-        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        // var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
         var frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
         function animate() {
             requestAnimationFrame(animate);
-            // update data in frequencyData
             analyser.getByteFrequencyData(frequencyData);
-            // render frame based on values in frequencyData
             for (var i = 0; i <= 1024; i++){
                 particle = particles[i++];
-                particle.position.y = frequencyData[i];
-            }
-            camera.rotation.x = 0.05;
-            renderer.render(scene, camera);
-            controls.update();
-        }
+                particle.position.y = (frequencyData[i] * 1.25) - 250;
 
+            }
+            camera.rotation.x = 0;
+            renderer.render(scene, camera);
+            // controls.update();
+        }
         animate();
     }
 });
+
+
+// if (i <= 512){
+//     particle.position.x = Math.random() * 256 - 256;
+//     particle.position.y = 0;
+//     particle.position.z = Math.random() * 150;
+// }
+// else{
+//     particle.position.x = Math.random() * 256;
+//     particle.position.y = 0;
+//     particle.position.z = Math.random() * 150;
+// }
