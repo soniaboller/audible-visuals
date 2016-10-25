@@ -12,7 +12,6 @@ $(document).ready(function() {
 
     function init() {
         scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x202020, 0.005);
         var width = window.innerWidth;
         var height = window.innerHeight;
 
@@ -38,7 +37,6 @@ $(document).ready(function() {
 
         var PI2 = Math.PI * 2;
         for (var i = 0; i <= 1024; i++) {
-
             var material = new THREE.SpriteCanvasMaterial({
                 color: 0xffffff, program: function (context) {
                     context.beginPath();
@@ -56,10 +54,10 @@ $(document).ready(function() {
             scene.add(particle)
         }
         particles2 = new Array();
-        for (var j = 0; j <= 1024; j++) {
+        for (var j = 0; j <= 2048; j++) {
 
             var material2 = new THREE.SpriteCanvasMaterial({
-                color: 0x00ffff, program: function (context2) {
+                color: 0xffffff, program: function (context2) {
                     context2.beginPath();
                     context2.arc(0, 0, 1, 0, PI2, true);
                     context2.fill();
@@ -68,6 +66,12 @@ $(document).ready(function() {
             var particle2 = particles2[ j ++ ] = new THREE.Particle(material2);
             if (j <= 1024){
                 particle2.position.x = (j - 512) * 1.1;
+                particle2.position.y = 0;
+                particle2.position.z = 0;
+
+            }
+            if (j > 1024){
+                particle2.position.x = (j - 1536) * 1.1;
                 particle2.position.y = 0;
                 particle2.position.z = 0;
 
@@ -107,13 +111,14 @@ $(document).ready(function() {
         console.log(audioSrc);
 
         var analyser = ctx.createAnalyser();
+        // analyser.smoothingTimeConstant = 1;
         console.log('analyser');
         console.log(analyser);
 
         audioSrc.connect(analyser);
         analyser.connect(ctx.destination);
 
-        var play = true;
+        var play = false;
         function onKeyDown(event) {
             switch (event.keyCode) {
                 case 32:
@@ -135,7 +140,7 @@ $(document).ready(function() {
         // var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
         var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
-        var timeFrequencyData = new Uint8Array(analyser.frequencyBinCount);
+        var timeFrequencyData = new Uint8Array(analyser.fftSize);
         var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
         function animate() {
@@ -145,17 +150,21 @@ $(document).ready(function() {
             analyser.getFloatFrequencyData(floatFrequencyData);
             for (var i = 0; i <= 1024; i++){
                 particle = particles[i++];
-                particle.position.y = (uintFrequencyData[i]);
+                particle.position.y = (uintFrequencyData[i] + 30);
+                particle.material.color.setRGB(1,1 - uintFrequencyData[i]/255,1);
 
             }
-            for (var j = 0; j <= 1024; j++){
+            for (var j = 0; j <= 2048; j++){
                 particle2 = particles2[j++];
-                particle2.position.y = (timeFrequencyData[j] - 178);
+                particle2.position.y = (timeFrequencyData[j]/1.5 - 138);
+                particle2.material.color.setRGB(1,1 - timeFrequencyData[j]/375,1);
 
             }
             for (var k = 0; k <= 1024; k++){
                 particle3 = particles3[k++];
-                particle3.position.y = -(uintFrequencyData[k] + 100);
+                particle3.position.y = -(uintFrequencyData[k] + 130);
+                particle3.material.color.setRGB(1,1 - (uintFrequencyData[k]/255),1);
+
 
             }
             // camera.rotation.y += 0.01;
@@ -165,15 +174,3 @@ $(document).ready(function() {
         animate();
     }
 });
-
-
-// if (i <= 512){
-//     particle.position.x = Math.random() * 256 - 256;
-//     particle.position.y = 0;
-//     particle.position.z = Math.random() * 150;
-// }
-// else{
-//     particle.position.x = Math.random() * 256;
-//     particle.position.y = 0;
-//     particle.position.z = Math.random() * 150;
-// }

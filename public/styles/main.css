@@ -3,6 +3,7 @@ body {
   margin: 0;
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   overflow: hidden;
+  background-color: #000;
 }
 
 canvas{
