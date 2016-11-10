@@ -40,7 +40,7 @@ $(document).ready(function() {
             var material = new THREE.SpriteCanvasMaterial({
                 color: 0xffffff, program: function (context) {
                     context.beginPath();
-                    context.arc(0, 0, 1, 0, PI2, true);
+                    context.arc(0, -1, 1, 0, PI2, true);
                     context.fill();
                 }
             });
@@ -85,7 +85,7 @@ $(document).ready(function() {
             var material3 = new THREE.SpriteCanvasMaterial({
                 color: 0xffffff, program: function (context3) {
                     context3.beginPath();
-                    context3.arc(0, 0, 1, 0, PI2, true);
+                    context3.arc(0, 1, 1, 0, PI2, true);
                     context3.fill();
                 }
             });
