@@ -165,7 +165,6 @@ $(document).ready(function() {
                 particle3.position.y = -(uintFrequencyData[k] + 130);
                 particle3.material.color.setRGB(1,1 - (uintFrequencyData[k]/255),1);
 
-
             }
             // camera.rotation.y += 0.01;
             renderer.render(scene, camera);
@@ -173,4 +172,5 @@ $(document).ready(function() {
         }
         animate();
     }
+
 });
