@@ -1,9 +1,11 @@
 var express = require('express');
-var router = express.Router();
+var controller = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', {});
+controller.get('/', function(req, res, next) {
+  res.render('index', {
+    title: 'three.js experiments'
+  });
 });
 
-module.exports = router;
+module.exports = controller;

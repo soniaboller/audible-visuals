@@ -30,8 +30,8 @@ $(document).ready(function() {
 
         var PI2 = Math.PI * 2;
         particles = new Array();
-        for (var j = 0; j <= 2048; j++) {
 
+        for (var j = 0; j <= 2048; j++) {
             var material = new THREE.SpriteCanvasMaterial({
                 color: 0xffffff, program: function (context) {
                     context.beginPath();
@@ -40,39 +40,40 @@ $(document).ready(function() {
                     context.fill();
                 }
             });
+
             var particle = particles[ j ++ ] = new THREE.Particle(material);
             var particleSpacing = 3;
             var particleOffset = 0;
             if (j < 256){
-                particle.position.x = (j - 128 - particleOffset) * (particleSpacing * 1.8);
+                particle.position.x = (j - 128 - particleOffset) * (particleSpacing * 1.8 );
                 particle.position.z = -200;
             }
             else if (j >= 256 && j < 512){
-                particle.position.x = (j - 384 - particleOffset) * (particleSpacing * 1.7);
+                particle.position.x = (j - 384 - particleOffset) * (particleSpacing * 1.7 );
                 particle.position.z = -150;
             }
             else if (j >= 512 && j < 768){
-                particle.position.x = (j - 640 - particleOffset) * (particleSpacing * 1.6);
+                particle.position.x = (j - 640 - particleOffset) * (particleSpacing * 1.6 );
                 particle.position.z = -100;
             }
             else if (j >= 768 && j < 1024){
-                particle.position.x = (j - 896 - particleOffset) * (particleSpacing * 1.5);
+                particle.position.x = (j - 896 - particleOffset) * (particleSpacing * 1.5 );
                 particle.position.z = -50;
             }
             else if (j >= 1024 && j < 1280){
-                particle.position.x = (j - 1152 - particleOffset) * (particleSpacing * 1.4);
+                particle.position.x = (j - 1152 - particleOffset) * (particleSpacing * 1.4 );
                 particle.position.z = 0;
             }
             else if (j >= 1280 && j < 1536){
-                particle.position.x = (j - 1408 - particleOffset) * (particleSpacing * 1.3);
+                particle.position.x = (j - 1408 - particleOffset) * (particleSpacing * 1.3 );
                 particle.position.z = 50;
             }
             else if (j >= 1536 && j < 1792){
-                particle.position.x = (j - 1664 - particleOffset) * (particleSpacing * 1.2);
+                particle.position.x = (j - 1664 - particleOffset) * (particleSpacing * 1.2 );
                 particle.position.z = 100;
             }
             else {
-                particle.position.x = (j - 1920 - particleOffset) * (particleSpacing * 1.1);
+                particle.position.x = (j - 1920 - particleOffset) * (particleSpacing * 1.1 );
                 particle.position.z = 150;
             }
             particle.position.y = 0;
@@ -106,9 +107,11 @@ $(document).ready(function() {
                     if (play) {
                         audio.pause();
                         play = false;
+                        // controls.autoRotate = true;
                     } else {
                         audio.play();
                         play = true;
+                        // controls.autoRotate = false;
                     }
                     break;
             }
@@ -166,8 +169,12 @@ $(document).ready(function() {
                 // particle.material.color.setRGB(1,1 - timeFrequencyData[j]/255,1);
 
             }
-            // camera.rotation.z += 0.005;
+
+            // camera.rotation.x += -Math.sin(1)/500;
+            // camera.rotation.z += -Math.sin(1)/500;
             renderer.render(scene, camera);
+            camera.lookAt(scene.position);
+            // controls.autoRotate = true;
             // controls.update();
         }
         animate();
