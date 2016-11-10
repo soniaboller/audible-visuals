@@ -174,6 +174,7 @@ $(document).ready(function() {
             // camera.rotation.z += -Math.sin(1)/500;
             renderer.render(scene, camera);
             camera.lookAt(scene.position);
+            // controls.target.set(0,0,0);
             // controls.autoRotate = true;
             // controls.update();
         }
