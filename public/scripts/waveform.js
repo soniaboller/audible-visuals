@@ -41,38 +41,38 @@ $(document).ready(function() {
                 }
             });
             var particle = particles[ j ++ ] = new THREE.Particle(material);
-            var particleSpacing = 3;
+            var particleSpacing = 2;
             var particleOffset = 0;
             if (j < 256){
-                particle.position.x = (j - 128 - particleOffset) * (particleSpacing * 1.8);
+                particle.position.x = (j - 128 - particleOffset) * (particleSpacing);
                 particle.position.z = -200;
             }
             else if (j >= 256 && j < 512){
-                particle.position.x = (j - 384 - particleOffset) * (particleSpacing * 1.7);
+                particle.position.x = (j - 384 - particleOffset) * (particleSpacing);
                 particle.position.z = -150;
             }
             else if (j >= 512 && j < 768){
-                particle.position.x = (j - 640 - particleOffset) * (particleSpacing * 1.6);
+                particle.position.x = (j - 640 - particleOffset) * (particleSpacing);
                 particle.position.z = -100;
             }
             else if (j >= 768 && j < 1024){
-                particle.position.x = (j - 896 - particleOffset) * (particleSpacing * 1.5);
+                particle.position.x = (j - 896 - particleOffset) * (particleSpacing);
                 particle.position.z = -50;
             }
             else if (j >= 1024 && j < 1280){
-                particle.position.x = (j - 1152 - particleOffset) * (particleSpacing * 1.4);
+                particle.position.x = (j - 1152 - particleOffset) * (particleSpacing);
                 particle.position.z = 0;
             }
             else if (j >= 1280 && j < 1536){
-                particle.position.x = (j - 1408 - particleOffset) * (particleSpacing * 1.3);
+                particle.position.x = (j - 1408 - particleOffset) * (particleSpacing);
                 particle.position.z = 50;
             }
             else if (j >= 1536 && j < 1792){
-                particle.position.x = (j - 1664 - particleOffset) * (particleSpacing * 1.2);
+                particle.position.x = (j - 1664 - particleOffset) * (particleSpacing);
                 particle.position.z = 100;
             }
             else {
-                particle.position.x = (j - 1920 - particleOffset) * (particleSpacing * 1.1);
+                particle.position.x = (j - 1920 - particleOffset) * (particleSpacing);
                 particle.position.z = 150;
             }
             particle.position.y = 0;
@@ -168,7 +168,10 @@ $(document).ready(function() {
             }
             // camera.rotation.z += 0.005;
             renderer.render(scene, camera);
-            // controls.update();
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 1;
+            controls.target.set(0,0,0);
+            controls.update();
         }
         animate();
     }
