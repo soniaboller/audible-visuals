@@ -1,15 +1,7 @@
-
-
-var width = window.innerWidth,
-    height = window.innerHeight,
-
-    mouseX = 0, mouseY = 0,
-
-    windowHalfX = window.innerWidth / 2,
-    windowHalfY = window.innerHeight / 2,
-
-
-    camera, scene, renderer;
+$(document).ready(function() {
+    var width = window.innerWidth,
+        height = window.innerHeight,
+        camera, scene, renderer;
 
 init();
 
@@ -18,7 +10,7 @@ function init() {
     var container = document.createElement('div');
     document.body.appendChild(container);
 
-    camera = new THREE.PerspectiveCamera( 75, width / height, 1, 20000 );
+    camera = new THREE.PerspectiveCamera( 50, width / height, 1, 20000 );
     camera.position.z = 1000;
 
     scene = new THREE.Scene();
@@ -63,7 +55,7 @@ function init() {
 
         var vertex = new THREE.Vector3( Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1 );
         vertex.normalize();
-        vertex.multiplyScalar( 150 );
+        vertex.multiplyScalar( 125 );
 
         geometry.vertices.push( vertex );
 
@@ -73,7 +65,7 @@ function init() {
 
         geometry.vertices.push( vertex2 );
 
-        var line = lines[ j ++ ] = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color: 0xffffff, opacity: Math.random() } ) );
+        var line = lines[ j ++ ] = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.65 } ) );
         scene.add( line );
     }
 
@@ -93,43 +85,45 @@ function init() {
         return false;
     }
 
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-    document.addEventListener( 'touchmove', onDocumentTouchMove, false );
     window.addEventListener("keydown", onKeyDown, false);
-    //
     window.addEventListener( 'resize', onWindowResize, false );
 
 
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
-    var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
-
+    // var timeFrequencyData = new Uint8Array(analyser.fftSize);
+    // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
     function animate() {
 
         requestAnimationFrame( animate );
 
         analyser.getByteFrequencyData(uintFrequencyData);
-        analyser.getByteTimeDomainData(timeFrequencyData);
-        analyser.getFloatFrequencyData(floatFrequencyData);
+        // analyser.getByteTimeDomainData(timeFrequencyData);
+        // analyser.getFloatFrequencyData(floatFrequencyData);
 
         for ( var j = 0; j <= 1024; j ++ ){
             line = lines[j++];
-            var intensity = 5;
+            var intensity = 4;
             line.geometry.vertices[1].z = (uintFrequencyData[j] * intensity + 50);
-            if (line.geometry.vertices[1].z > (60 * intensity) && line.geometry.vertices[1].z < (100 * intensity)){
-                line.material.color.r = 0;
-                line.material.color.b = 0;
-            }
-            else if (line.geometry.vertices[1].z >= (100 * intensity)){
-                line.material.color.r = 1;
-                line.material.color.g = 0;
-            }
-            else {
+            if (line.geometry.vertices[1].z > (13 * intensity) && line.geometry.vertices[1].z < (90 * intensity)){
                 line.material.color.r = 1;
                 line.material.color.g = 1;
-                line.material.color.b = 1;
+                line.material.color.b = 0;
+            }
+            else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
+                line.material.color.r = 1;
+                line.material.color.g = 0;
+                line.material.color.b = 0;
+            }
+            else if (line.geometry.vertices[1].z >= (150 * intensity)){
+                line.material.color.r = 1;
+                line.material.color.g = 0;
+                line.material.color.b = 0.75;
+            }
+            else {
+                line.material.color.r = 0;
+                line.material.color.g = 0;
+                line.material.color.b = 0;
             }
         }
 
@@ -137,63 +131,19 @@ function init() {
 
     }
     animate();
-
 }
 
 function onWindowResize() {
-
-    windowHalfX = window.innerWidth / 2;
-    windowHalfY = window.innerHeight / 2;
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
-
-}
-
-//
-
-function onDocumentMouseMove(event) {
-
-    mouseX = event.clientX - windowHalfX;
-    mouseY = event.clientY - windowHalfY;
-}
-
-function onDocumentTouchStart( event ) {
-
-    if ( event.touches.length > 1 ) {
-
-        event.preventDefault();
-
-        mouseX = event.touches[ 0 ].pageX - windowHalfX;
-        mouseY = event.touches[ 0 ].pageY - windowHalfY;
-
-    }
-}
-
-function onDocumentTouchMove( event ) {
-
-    if ( event.touches.length == 1 ) {
-
-        event.preventDefault();
-
-        mouseX = event.touches[ 0 ].pageX - windowHalfX;
-        mouseY = event.touches[ 0 ].pageY - windowHalfY;
-
-    }
-
 }
 
 
 function render() {
-
-    // camera.position.x += ( mouseX - camera.position.x ) * .005;
-    // camera.position.y += ( - mouseY - camera.position.y ) * .005;
     camera.lookAt( scene.position );
-
     renderer.render( scene, camera );
-    // controls.update();
-
 }
 
+});

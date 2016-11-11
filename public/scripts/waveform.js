@@ -132,17 +132,17 @@ $(document).ready(function() {
             return false;
         }
 
-        var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
+        // var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
         var timeFrequencyData = new Uint8Array(analyser.fftSize);
-        var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
+        // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
         window.addEventListener("keydown", onKeyDown, false);
 
         function animate() {
             requestAnimationFrame(animate);
-            analyser.getByteFrequencyData(uintFrequencyData);
+            // analyser.getByteFrequencyData(uintFrequencyData);
             analyser.getByteTimeDomainData(timeFrequencyData);
-            analyser.getFloatFrequencyData(floatFrequencyData);
+            // analyser.getFloatFrequencyData(floatFrequencyData);
             for (var j = 0; j <= 2048; j++){
                 var intensity = 1;
                 var particleHeight;
