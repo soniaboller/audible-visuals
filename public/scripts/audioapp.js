@@ -119,10 +119,10 @@ $(document).ready(function() {
         analyser.connect(ctx.destination);
 
         var play = false;
-        function onKeyDown(event) {
-            switch (event.keyCode) {
+        function onKeyDown(e) {
+            switch (e.which) {
                 case 32:
-                    console.log(event.keyCode);
+                    console.log(e.which);
                     if (play) {
                         audio.pause();
                         play = false;
