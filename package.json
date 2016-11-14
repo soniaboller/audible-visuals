@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "gulp"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -11,6 +11,7 @@
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1",
     "hbs": "~4.0.0",
     "morgan": "~1.7.0",
     "node-sass-middleware": "0.8.0",

@@ -45,7 +45,7 @@ $(document).ready(function() {
 
             var particle = particles[ j ++ ] = new THREE.Particle(material);
             var particlePositionZ = -175;
-            var particleSpacing = 4;
+            var particleSpacing = 3;
             var particleOffset = 0;
             if (j < 256){
                 particle.position.x = (j - 128 - particleOffset) * (particleSpacing);

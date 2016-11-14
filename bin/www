@@ -14,6 +14,10 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '9000');
 app.set('port', port);
+console.log('server running on port ' + port);
+console.log('/audiovis');
+console.log('/audiovis/waveform');
+console.log('/audiovis/sphere');
 
 /**
  * Create HTTP server.
