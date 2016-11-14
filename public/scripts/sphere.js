@@ -31,24 +31,24 @@ function init() {
     console.log(controls);
 
 
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // var ctx = new (window.AudioContext || window.webkitAudioContext)();
     // console.log('audioCtx');
     // console.log(ctx);
-
-    var audio = document.querySelector('audio');
+    //
+    // var audio = document.querySelector('audio');
     // console.log('audio');
     // console.log(audio);
-
-    var audioSrc = ctx.createMediaElementSource(audio);
+    //
+    // var audioSrc = ctx.createMediaElementSource(audio);
     // console.log(audioSrc);
-
-    var analyser = ctx.createAnalyser();
-    // analyser.smoothingTimeConstant = 1;
-    console.log('analyser');
-    console.log(analyser);
-
-    audioSrc.connect(analyser);
-    analyser.connect(ctx.destination);
+    //
+    // var analyser = ctx.createAnalyser();
+    // // analyser.smoothingTimeConstant = 1;
+    // console.log('analyser');
+    // console.log(analyser);
+    //
+    // audioSrc.connect(analyser);
+    // analyser.connect(ctx.destination);
 
 
     // lines
@@ -78,10 +78,10 @@ function init() {
         switch (e.which) {
             case 32:
                 if (app.play) {
-                    audio.play();
+                    source.start();
                     app.play = false;
                 } else {
-                    audio.play();
+                    source.stop();
                     app.play = true;
                 }
                 break;

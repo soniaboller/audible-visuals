@@ -34,42 +34,42 @@ window.onload = function () {
             // this is the base64
             // console.log(data);
 
-            var formData = new FormData();
-            formData.append('url', data);
-            var url = formData.get('url');
+            // var formData = new FormData();
+            // formData.append('url', data);
+            // var url = formData.get('url');
             // console.log(url);
+            // $('body').append('<audio src="'+ url + '" controls="controls"></audio>');
+            // app.init();
 
-            $('body').append('<audio src="'+ url + '" controls="controls"></audio>');
-            app.init();
-            // initiateAudio(data);
+            initiateAudio(data);
         };
 
-        var song = fileReader.readAsDataURL(droppedFiles[0]);
+        var song = fileReader.readAsArrayBuffer(droppedFiles[0]);
         console.log('song');
         console.log(song)
     }
 
-    // function initiateAudio(data) {
-    //     ctx = new AudioContext();
-    //     source = ctx.createBufferSource();
-    //     console.log(source);
-    //     ctx.decodeAudioData(data, function (buffer) {
-    //         source.buffer = buffer;
-    //         createAudio();
-    //     }, function (e) {
-    //         console.log(e);
-    //     });
-    //
-    //     function createAudio() {
-    //         analyser = ctx.createAnalyser();
-    //         source.connect(ctx.destination);
-    //         source.connect(analyser);
-    //         source.start();
-    //         console.log(app);
-    //         app.init();
-    //
-    //     }
-    //
-    // }
+    function initiateAudio(data) {
+        ctx = new AudioContext();
+        source = ctx.createBufferSource();
+        console.log(source);
+        ctx.decodeAudioData(data, function (buffer) {
+            source.buffer = buffer;
+            createAudio();
+        }, function (e) {
+            console.log(e);
+        });
+
+        function createAudio() {
+            analyser = ctx.createAnalyser();
+            source.connect(ctx.destination);
+            source.connect(analyser);
+            source.start();
+            console.log(app);
+            app.init();
+
+        }
+
+    }
 };
 
