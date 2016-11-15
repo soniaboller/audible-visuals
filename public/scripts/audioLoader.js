@@ -5,7 +5,7 @@ var buffer;
 var analyser;
 
 window.onload = function () {
-    console.log('audio loader connected');
+    console.log('array buffer audio loader connected');
 
     window.addEventListener('drop', onDrop, false);
     window.addEventListener('dragover', onDrag, false);
