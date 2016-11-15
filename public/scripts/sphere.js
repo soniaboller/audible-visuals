@@ -14,7 +14,7 @@ function init() {
     document.body.appendChild(container);
 
     camera = new THREE.PerspectiveCamera( 50, width / height, 1, 20000 );
-    camera.position.z = 1000;
+    camera.position.z = 1150;
 
     scene = new THREE.Scene();
 
@@ -109,45 +109,51 @@ function init() {
 
         for ( var j = 0; j <= 1024; j ++ ){
             line = lines[j++];
-            var intensity = 4;
+            var intensity = 5;
             line.geometry.vertices[1].z = (uintFrequencyData[j] * intensity + 50);
             line.geometry.vertices[0].z = -(uintFrequencyData[j]);
             if (line.geometry.vertices[1].z > (13 * intensity) && line.geometry.vertices[1].z < (90 * intensity)){
+                // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity);
+
                 // yellow
+                line.material.color.r = 1;
+                line.material.color.g = 0.75;
+                line.material.color.b = 0;
+
+                // fuchsia
                 // line.material.color.r = 1;
-                // line.material.color.g = 0.75;
-                // line.material.color.b = 0;
+                // line.material.color.g = 0;
+                // line.material.color.b = 0.5;
+
+                line.material.opacity = 0.65;
+            }
+            else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
+                // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity );
+
+                // red
+                line.material.color.r = 1;
+                line.material.color.g = 0;
+                line.material.color.b = 0;
+
+                // magenta
+                // line.material.color.r = 1;
+                // line.material.color.g = 0;
+                // line.material.color.b = 1;
+
+                line.material.opacity = 0.65;
+            }
+            else if (line.geometry.vertices[1].z >= (150 * intensity)){
+                // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity * intensity * intensity);
 
                 // fuchsia
                 line.material.color.r = 1;
                 line.material.color.g = 0;
                 line.material.color.b = 0.5;
 
-                line.material.opacity = 0.65;
-            }
-            else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
-                // red
-                // line.material.color.r = 1;
-                // line.material.color.g = 0;
-                // line.material.color.b = 0;
-
-                // magenta
-                line.material.color.r = 1;
-                line.material.color.g = 0;
-                line.material.color.b = 1;
-
-                line.material.opacity = 0.65;
-            }
-            else if (line.geometry.vertices[1].z >= (150 * intensity)){
-                // fuchsia
-                // line.material.color.r = 1;
-                // line.material.color.g = 0;
-                // line.material.color.b = 0.5;
-
                 // blue
-                line.material.color.r = 0;
-                line.material.color.g = 0;
-                line.material.color.b = 1;
+                // line.material.color.r = 0;
+                // line.material.color.g = 0;
+                // line.material.color.b = 1;
 
                 line.material.opacity = 0.65;
             }
