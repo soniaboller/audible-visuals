@@ -30,10 +30,8 @@ window.onload = function () {
             console.log('fileEvent variable');
             console.log(fileEvent);
             var data = fileEvent.target.result;
-            console.log('data (fileEvent.target.result)');
-            // this is the base64
+            console.log('data (fileEvent.target.result) -- base64');
             // console.log(data);
-
             // var formData = new FormData();
             // formData.append('url', data);
             // var url = formData.get('url');
@@ -43,10 +41,7 @@ window.onload = function () {
 
             initiateAudio(data);
         };
-
-        var song = fileReader.readAsArrayBuffer(droppedFiles[0]);
-        console.log('song');
-        console.log(song)
+        fileReader.readAsArrayBuffer(droppedFiles[0]);
     }
 
     function initiateAudio(data) {

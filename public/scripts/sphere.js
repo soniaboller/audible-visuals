@@ -1,8 +1,7 @@
 // $(document).ready(function() {
-    var width = window.innerWidth,
-        height = window.innerHeight,
-        camera, scene, renderer;
-
+var width = window.innerWidth,
+    height = window.innerHeight,
+    camera, scene, renderer;
 
 var app = app || {};
 app.init = init;
@@ -31,9 +30,10 @@ function init() {
     console.log(controls);
 
 
+    // AUDIO ANALYSER -- now in audioLoader.js
     // var ctx = new (window.AudioContext || window.webkitAudioContext)();
     // console.log('audioCtx');
-    console.log(ctx);
+    // console.log(ctx);
     //
     // var audio = document.querySelector('audio');
     // console.log('audio');
@@ -50,8 +50,11 @@ function init() {
     // audioSrc.connect(analyser);
     // analyser.connect(ctx.destination);
 
+    var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
+    // var timeFrequencyData = new Uint8Array(analyser.fftSize);
+    // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
-    // lines
+    // LINES
     lines = new Array();
     for (var j = 0; j <= 1024; j++) {
 
@@ -65,7 +68,6 @@ function init() {
 
         var vertex2 = vertex.clone();
         vertex2.multiplyScalar(1.25);
-        // vertex2.multiplyScalar( Math.random() * 0.3 + 1 );
 
         geometry.vertices.push(vertex2);
 
@@ -78,9 +80,11 @@ function init() {
         switch (e.which) {
             case 32:
                 if (app.play) {
+                    // audio.pause();
                     source.start();
                     app.play = false;
                 } else {
+                    // audio.play();
                     source.stop();
                     app.play = true;
                 }
@@ -91,21 +95,16 @@ function init() {
         return false;
     }
 
-    window.addEventListener("keydown", onKeyDown, false);
+    window.addEventListener('keydown', onKeyDown, false);
     window.addEventListener('resize', onWindowResize, false );
-
-
-    var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
-    var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
     function animate() {
 
         requestAnimationFrame( animate );
 
         analyser.getByteFrequencyData(uintFrequencyData);
-        analyser.getByteTimeDomainData(timeFrequencyData);
-        analyser.getFloatFrequencyData(floatFrequencyData);
+        // analyser.getByteTimeDomainData(timeFrequencyData);
+        // analyser.getFloatFrequencyData(floatFrequencyData);
 
         for ( var j = 0; j <= 1024; j ++ ){
             line = lines[j++];
@@ -115,12 +114,12 @@ function init() {
             if (line.geometry.vertices[1].z > (13 * intensity) && line.geometry.vertices[1].z < (90 * intensity)){
                 // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity);
 
-                // yellow
+                // YELLOW
                 line.material.color.r = 1;
                 line.material.color.g = 0.75;
                 line.material.color.b = 0;
 
-                // fuchsia
+                // FUCHSIA
                 // line.material.color.r = 1;
                 // line.material.color.g = 0;
                 // line.material.color.b = 0.5;
@@ -130,12 +129,12 @@ function init() {
             else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
                 // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity );
 
-                // red
+                // RED
                 line.material.color.r = 1;
                 line.material.color.g = 0;
                 line.material.color.b = 0;
 
-                // magenta
+                // MAGENTA
                 // line.material.color.r = 1;
                 // line.material.color.g = 0;
                 // line.material.color.b = 1;
@@ -145,12 +144,12 @@ function init() {
             else if (line.geometry.vertices[1].z >= (150 * intensity)){
                 // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity * intensity * intensity);
 
-                // fuchsia
+                // FUCHSIA
                 line.material.color.r = 1;
                 line.material.color.g = 0;
                 line.material.color.b = 0.5;
 
-                // blue
+                // BLUE
                 // line.material.color.r = 0;
                 // line.material.color.g = 0;
                 // line.material.color.b = 1;
@@ -173,10 +172,8 @@ function init() {
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
-
 
 function render() {
     camera.lookAt( scene.position );

@@ -111,14 +111,14 @@ app.play = false;
         function onKeyDown(e) {
             switch (e.which) {
                 case 32:
-                    if (play) {
-                        audio.pause();
-                        play = false;
-                        // controls.autoRotate = true;
+                    if (app.play) {
+                        // audio.pause();
+                        source.start();
+                        app.play = false;
                     } else {
-                        audio.play();
-                        play = true;
-                        // controls.autoRotate = false;
+                        // audio.play();
+                        source.stop();
+                        app.play = true;
                     }
                     break;
                 case 83:
