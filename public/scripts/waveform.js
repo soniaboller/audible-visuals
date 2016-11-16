@@ -1,9 +1,13 @@
 console.log('loaded');
 
-$(document).ready(function() {
+// $(document).ready(function() {
+
+var app = app || {};
+app.init = init;
+app.play = false;
 
     var scene, camera, renderer;
-    init();
+    // init();
 
     function init() {
         scene = new THREE.Scene();
@@ -83,24 +87,24 @@ $(document).ready(function() {
             scene.add(particle)
         }
 
-        var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        console.log('audioCtx');
-        console.log(ctx);
-
-        var audio = document.querySelector('audio');
-        console.log('audio');
-        console.log(audio);
-
-        var audioSrc = ctx.createMediaElementSource(audio);
-        console.log(audioSrc);
-
-        var analyser = ctx.createAnalyser();
-        // analyser.smoothingTimeConstant = 1;
-        console.log('analyser');
-        console.log(analyser);
-
-        audioSrc.connect(analyser);
-        analyser.connect(ctx.destination);
+        // var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        // console.log('audioCtx');
+        // console.log(ctx);
+        //
+        // var audio = document.querySelector('audio');
+        // console.log('audio');
+        // console.log(audio);
+        //
+        // var audioSrc = ctx.createMediaElementSource(audio);
+        // console.log(audioSrc);
+        //
+        // var analyser = ctx.createAnalyser();
+        // // analyser.smoothingTimeConstant = 1;
+        // console.log('analyser');
+        // console.log(analyser);
+        //
+        // audioSrc.connect(analyser);
+        // analyser.connect(ctx.destination);
 
         var play = false;
         controls.autoRotate = false;
@@ -211,4 +215,4 @@ $(document).ready(function() {
         animate();
     }
 
-});
+// });

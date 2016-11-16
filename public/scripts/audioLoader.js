@@ -52,6 +52,9 @@ window.onload = function () {
     function initiateAudio(data) {
         ctx = new AudioContext();
         source = ctx.createBufferSource();
+        console.log('this the the buffer source');
+        //yoooo you can change the speed of the song!!!
+        source.playbackRate.value = 1;
         console.log(source);
         ctx.decodeAudioData(data, function (buffer) {
             source.buffer = buffer;

@@ -33,7 +33,7 @@ function init() {
 
     // var ctx = new (window.AudioContext || window.webkitAudioContext)();
     // console.log('audioCtx');
-    // console.log(ctx);
+    console.log(ctx);
     //
     // var audio = document.querySelector('audio');
     // console.log('audio');
