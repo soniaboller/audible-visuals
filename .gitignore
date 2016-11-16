@@ -1,1 +1,9 @@
+# webstorm idea
 .idea
+
+# dependencies
+node_modules
+jspm_packages
+
+# local audio files
+public/media/*
