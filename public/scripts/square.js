@@ -1,7 +1,8 @@
 console.log('wave loaded');
 
-var app = app || {};
+var app = app || {}
 app.init = init;
+app.animate = animate;
 app.play = false;
 
 var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
@@ -11,8 +12,8 @@ var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
 
 var camera, scene, renderer;
 
-
 function init() {
+    console.log('init')
     scene = new THREE.Scene();
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -46,7 +47,7 @@ function init() {
     // move this into the particle generating loop for color changing, but prevents bottom tiles from being accessed for rotation
 
     var i = 0;
-    for (var iy = 0; iy < yNum; iy++){
+    for (var iy = 0; iy < yNum; iy++) {
         var material = new THREE.SpriteMaterial({
             color: 0xffffff
             // program: function ( context ) {
@@ -57,7 +58,7 @@ function init() {
             //
             // }
         });
-        for (var ix = 0; ix < xNum; ix++){
+        for (var ix = 0; ix < xNum; ix++) {
             var particle = particles[i++] = new THREE.Particle(material);
             particle.position.x = ix * xSeparation - (( xNum * xSeparation ) / 2);
             particle.position.y = iy * ySeparation - (( yNum * ySeparation ) / 2);
@@ -66,21 +67,22 @@ function init() {
     }
 
     var black = true;
+
     function onKeyDown(e) {
         switch (e.which) {
             case 32:
                 if (app.play) {
-                    // audio.pause();
-                    source.start();
+                    app.audio.pause();
+                    // source.start();
                     app.play = false;
                 } else {
-                    // audio.play();
-                    source.stop();
+                    app.audio.play();
+                    // source.stop();
                     app.play = true;
                 }
                 break;
             case 84:
-                if (black){
+                if (black) {
                     renderer.setClearColor(0xffffff, 1);
                     for (var i = 0; i <= particles.length; i++) {
                         particle = particles[i++];
@@ -99,6 +101,7 @@ function init() {
         }
         return false;
     }
+
     // change e back to event if this stops working
     function onDocumentMouseMove(e) {
         mouseX = e.clientX - windowHalfX;
@@ -108,16 +111,16 @@ function init() {
     function onDocumentTouchStart(e) {
         if (e.touches.length === 1) {
             e.preventDefault();
-            mouseX = e.touches[ 0 ].pageX - windowHalfX;
-            mouseY = e.touches[ 0 ].pageY - windowHalfY;
+            mouseX = e.touches[0].pageX - windowHalfX;
+            mouseY = e.touches[0].pageY - windowHalfY;
         }
     }
 
     function onDocumentTouchMove(e) {
         if (e.touches.length === 1) {
             e.preventDefault();
-            mouseX = e.touches[ 0 ].pageX - windowHalfX;
-            mouseY = e.touches[ 0 ].pageY - windowHalfY;
+            mouseX = e.touches[0].pageX - windowHalfX;
+            mouseY = e.touches[0].pageY - windowHalfY;
         }
     }
 
@@ -125,47 +128,45 @@ function init() {
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
+}
 
+function animate() {
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     var timeFloatData = new Float32Array(analyser.fftSize);
+    requestAnimationFrame(animate);
+    analyser.getByteTimeDomainData(timeFrequencyData);
+    analyser.getFloatTimeDomainData(timeFloatData);
+    // console.log(timeFloatData);
+    // console.log(timeFrequencyData);
+    for (var j = 0; j <= particles.length; j++){
+        particle = particles[j++];
+        particle.position.z = (timeFrequencyData[j] / 10);
+        // particle.position.z = (timeFloatData[j] * 10);
 
-    function animate() {
-        requestAnimationFrame(animate);
-        analyser.getByteTimeDomainData(timeFrequencyData);
-        analyser.getFloatTimeDomainData(timeFloatData);
-        // console.log(timeFloatData);
-        // console.log(timeFrequencyData);
-        for (var j = 0; j <= particles.length; j++){
-            particle = particles[j++];
-            particle.position.z = (timeFrequencyData[j] / 10);
-            // particle.position.z = (timeFloatData[j] * 10);
+            // for when material is generated outside of loop
+        // particle.material.rotation += 0.00001;
 
-                // for when material is generated outside of loop
-            // particle.material.rotation += 0.00001;
+            // for when material is generated within first part of loop
+        particle.material.rotation += 0.0003;
 
-                // for when material is generated within first part of loop
-            particle.material.rotation += 0.0003;
-
-                // for when material is generated within second part of loop
-            // particle.material.rotation += 0.005;
+            // for when material is generated within second part of loop
+        // particle.material.rotation += 0.005;
 
 
-            var R = 1 - (timeFloatData[j]);
-            var G = 1 - (timeFloatData[j]);
-            var B = 1;
-            particle.material.color.setRGB(R, G, B);
+        // var R = 1 - (timeFloatData[j]);
+        // var G = 1 - (timeFloatData[j]);
+        // var B = 1;
+        // particle.material.color.setRGB(R, G, B);
 
 
-            // particle.position.x = particle.position.x - (mouseX * 0.00005);
-            // particle.position.y = particle.position.y + (mouseY * 0.00005);
+        // particle.position.x = particle.position.x - (mouseX * 0.00005);
+        // particle.position.y = particle.position.y + (mouseY * 0.00005);
 
 
-        }
-
-        camera.position.x = ( mouseX - camera.position.x ) * 0.05;
-        camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
-        camera.lookAt( scene.position );
-        renderer.render( scene, camera );
     }
-    animate();
+
+    camera.position.x = ( mouseX - camera.position.x ) * 0.05;
+    camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
+    camera.lookAt( scene.position );
+    renderer.render( scene, camera );
 }

@@ -5,6 +5,7 @@ var buffer;
 var analyser;
 
 window.onload = function () {
+    app.init();
     console.log('array buffer audio loader connected');
 
     window.addEventListener('drop', onDrop, false);
@@ -19,60 +20,20 @@ window.onload = function () {
     function onDrop(e) {
         e.stopPropagation();
         e.preventDefault();
-
         var droppedFiles = e.dataTransfer.files;
-        console.log('dropped files var');
-        console.log(droppedFiles);
-
-        var fileReader = new FileReader();
-
-        fileReader.onload = function (fileEvent) {
-            console.log('fileEvent variable');
-            console.log(fileEvent);
-            var data = fileEvent.target.result;
-            console.log('data (fileEvent.target.result) -- base64');
-            // console.log(data);
-            // var formData = new FormData();
-            // formData.append('url', data);
-            // var url = formData.get('url');
-            // console.log(url);
-            // $('body').append('<audio src="'+ url + '" controls="controls"></audio>');
-            // app.init();
-
-            initiateAudio(data);
-        };
-        fileReader.readAsArrayBuffer(droppedFiles[0]);
+        initiateAudio(droppedFiles[0]);
     }
 
     function initiateAudio(data) {
+        app.audio = document.createElement('audio');
+        app.audio.src = URL.createObjectURL(data);
+        document.body.appendChild(app.audio);
         ctx = new AudioContext();
-        source = ctx.createBufferSource();
-        console.log('this the the buffer source');
-        //yoooo you can change the speed of the song!!!
-        source.playbackRate.value = 1;
-        console.log(source.length);
-        ctx.decodeAudioData(data, function (buffer) {
-            source.buffer = buffer;
-            // var channelData = buffer.getChannelData(buffer)
-            // var bufferArray = []
-            // bufferArray.push(channelData)
-            createAudio();
-        }, function (e) {
-            console.log(e);
-        });
-
-        function createAudio() {
-            analyser = ctx.createAnalyser();
-            source.connect(ctx.destination);
-            source.connect(analyser);
-            source.start();
-            console.log(app);
-            app.init();
-            // this does log the current time, but I'm not sure it's relevant
-            console.log(ctx.currentTime)
-
-        }
-
+        source = ctx.createMediaElementSource(app.audio);
+        analyser = ctx.createAnalyser();
+        source.connect(ctx.destination);
+        source.connect(analyser);
+        app.animate();
     }
 };
 
