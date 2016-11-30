@@ -138,7 +138,7 @@ function init() {
         for (var j = 0; j <= particles.length; j++){
             particle = particles[j++];
             particle.position.z = (timeFrequencyData[j] / 10);
-            // particle.position.z = (timeFloatData[j] * 50);
+            // particle.position.z = (timeFloatData[j] * 10);
 
                 // for when material is generated outside of loop
             // particle.material.rotation += 0.00001;
