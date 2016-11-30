@@ -29,43 +29,39 @@ function init() {
     // camera.position.set(0, 0, 75);
 
     renderer.setClearColor(0x000000, 1);
+    // CHANGE THIS into a function with an event lisenter instead
     window.addEventListener('resize', function () {
+        width = window.innerWidth;
+        height = window.innerHeight;
         windowHalfX = window.innerWidth / 2;
         windowHalfY = window.innerHeight / 2;
-        var width = window.innerWidth;
-        var height = window.innerHeight;
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
     });
 
-    // var controls = new THREE.OrbitControls(camera, renderer.domElement);
-
     var PI2 = Math.PI * 2;
     particles = new Array();
 
-    // move this into the loop??
-
-    var material = new THREE.SpriteMaterial( {
-
-        color: 0xffffff
-        // program: function ( context ) {
-        //
-        //     context.beginPath();
-        //     context.arc( 0, 0, 0.25, 0, PI2, true );
-        //     context.fill();
-        //
-        // }
-
-    } );
+    // move this into the particle generating loop for color changing, but prevents bottom tiles from being accessed for rotation
 
     var i = 0;
-    for ( var iy = 0; iy < yNum; iy++ ) {
-        for ( var ix = 0; ix < xNum; ix++ ) {
-            var particle = particles[i++] = new THREE.Particle( material );
-            particle.position.x = ix * xSeparation - ( ( xNum * xSeparation ) / 2 );
-            particle.position.y = iy * ySeparation - ( ( yNum * ySeparation ) / 2 );
-            scene.add( particle );
+    for (var iy = 0; iy < yNum; iy++){
+        var material = new THREE.SpriteMaterial({
+            color: 0xffffff
+            // program: function ( context ) {
+            //
+            //     context.beginPath();
+            //     context.arc( 0, 0, 0.25, 0, PI2, true );
+            //     context.fill();
+            //
+            // }
+        });
+        for (var ix = 0; ix < xNum; ix++){
+            var particle = particles[i++] = new THREE.Particle(material);
+            particle.position.x = ix * xSeparation - (( xNum * xSeparation ) / 2);
+            particle.position.y = iy * ySeparation - (( yNum * ySeparation ) / 2);
+            scene.add(particle);
         }
     }
 
@@ -103,63 +99,62 @@ function init() {
         }
         return false;
     }
-
-
-    function onDocumentMouseMove(event) {
-
-        mouseX = event.clientX - windowHalfX;
-        mouseY = event.clientY - windowHalfY;
+    // change e back to event if this stops working
+    function onDocumentMouseMove(e) {
+        mouseX = e.clientX - windowHalfX;
+        mouseY = e.clientY - windowHalfY;
     }
 
-    function onDocumentTouchStart( event ) {
-
-        if ( event.touches.length === 1 ) {
-
-            event.preventDefault();
-
-            mouseX = event.touches[ 0 ].pageX - windowHalfX;
-            mouseY = event.touches[ 0 ].pageY - windowHalfY;
-
+    function onDocumentTouchStart(e) {
+        if (e.touches.length === 1) {
+            e.preventDefault();
+            mouseX = e.touches[ 0 ].pageX - windowHalfX;
+            mouseY = e.touches[ 0 ].pageY - windowHalfY;
         }
-
     }
 
-    function onDocumentTouchMove( event ) {
-
-        if ( event.touches.length === 1 ) {
-
-            event.preventDefault();
-
-            mouseX = event.touches[ 0 ].pageX - windowHalfX;
-            mouseY = event.touches[ 0 ].pageY - windowHalfY;
-
+    function onDocumentTouchMove(e) {
+        if (e.touches.length === 1) {
+            e.preventDefault();
+            mouseX = e.touches[ 0 ].pageX - windowHalfX;
+            mouseY = e.touches[ 0 ].pageY - windowHalfY;
         }
-
     }
 
-    document.addEventListener('mousemove', onDocumentMouseMove, false );
-    document.addEventListener('touchstart', onDocumentTouchStart, false );
-    document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+    document.addEventListener('touchstart', onDocumentTouchStart, false);
+    document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
 
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
+    var timeFloatData = new Float32Array(analyser.fftSize);
 
     function animate() {
-        requestAnimationFrame( animate );
+        requestAnimationFrame(animate);
         analyser.getByteTimeDomainData(timeFrequencyData);
-
+        analyser.getFloatTimeDomainData(timeFloatData);
+        // console.log(timeFloatData);
+        // console.log(timeFrequencyData);
         for (var j = 0; j <= particles.length; j++){
             particle = particles[j++];
             particle.position.z = (timeFrequencyData[j] / 10);
-            particle.material.rotation += 0.00001;
+            // particle.position.z = (timeFloatData[j] * 50);
+
+                // for when material is generated outside of loop
+            // particle.material.rotation += 0.00001;
+
+                // for when material is generated within first part of loop
+            particle.material.rotation += 0.0003;
+
+                // for when material is generated within second part of loop
+            // particle.material.rotation += 0.005;
 
 
-            // if (particle.position.z > 12){
-            //     particle.material.color.setHex(0xb798b1);
-            // }
-            // else {
-            //     particle.material.color.setHex(0xffffff);
-            // }
+            var R = 1 - (timeFloatData[j]);
+            var G = 1 - (timeFloatData[j]);
+            var B = 1;
+            particle.material.color.setRGB(R, G, B);
+
 
             // particle.position.x = particle.position.x - (mouseX * 0.00005);
             // particle.position.y = particle.position.y + (mouseY * 0.00005);
