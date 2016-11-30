@@ -4,7 +4,7 @@ var app = app || {};
 app.init = init;
 app.play = false;
 
-var separation = 1.05, xNum = 45, yNum = 45,
+var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
     mouseX = 0, mouseY = 0,
     windowHalfX = window.innerWidth / 2,
     windowHalfY = window.innerHeight / 2;
@@ -30,6 +30,8 @@ function init() {
 
     renderer.setClearColor(0x000000, 1);
     window.addEventListener('resize', function () {
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
         var width = window.innerWidth;
         var height = window.innerHeight;
         renderer.setSize(width, height);
@@ -43,16 +45,17 @@ function init() {
     particles = new Array();
 
     // move this into the loop??
+
     var material = new THREE.SpriteMaterial( {
 
-        color: 0xffffff,
-        program: function ( context ) {
-
-            context.beginPath();
-            context.arc( 0, 0, 0.25, 0, PI2, true );
-            context.fill();
-
-        }
+        color: 0xffffff
+        // program: function ( context ) {
+        //
+        //     context.beginPath();
+        //     context.arc( 0, 0, 0.25, 0, PI2, true );
+        //     context.fill();
+        //
+        // }
 
     } );
 
@@ -60,15 +63,13 @@ function init() {
     for ( var iy = 0; iy < yNum; iy++ ) {
         for ( var ix = 0; ix < xNum; ix++ ) {
             var particle = particles[i++] = new THREE.Particle( material );
-            particle.position.x = ix * separation - ( ( xNum * separation ) / 2 );
-            particle.position.y = iy * separation - ( ( yNum * separation ) / 2 );
+            particle.position.x = ix * xSeparation - ( ( xNum * xSeparation ) / 2 );
+            particle.position.y = iy * ySeparation - ( ( yNum * ySeparation ) / 2 );
             scene.add( particle );
         }
     }
-    console.log(particles);
 
-    var play = false;
-    // controls.autoRotate = false;
+    var black = true;
     function onKeyDown(e) {
         switch (e.which) {
             case 32:
@@ -82,17 +83,23 @@ function init() {
                     app.play = true;
                 }
                 break;
-            case 83:
-                if (controls.autoRotate){
-                    controls.autoRotate = false;
+            case 84:
+                if (black){
+                    renderer.setClearColor(0xffffff, 1);
+                    for (var i = 0; i <= particles.length; i++) {
+                        particle = particles[i++];
+                        particle.material.color.setHex(0x000000);
+                    }
+                    black = false
                 }
-                else{
-                    controls.autoRotate = true;
+                else {
+                    renderer.setClearColor(0x000000, 1);
+                    for (var i = 0; i <= particles.length; i++) {
+                        particle = particles[i++];
+                        particle.material.color.setHex(0xffffff);
+                    }
+                    black = true
                 }
-                break;
-            case 66:
-                controls.reset();
-
         }
         return false;
     }
@@ -104,8 +111,36 @@ function init() {
         mouseY = event.clientY - windowHalfY;
     }
 
-    document.addEventListener("mousemove", onDocumentMouseMove, false );
-    document.addEventListener("keydown", onKeyDown, false);
+    function onDocumentTouchStart( event ) {
+
+        if ( event.touches.length === 1 ) {
+
+            event.preventDefault();
+
+            mouseX = event.touches[ 0 ].pageX - windowHalfX;
+            mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+        }
+
+    }
+
+    function onDocumentTouchMove( event ) {
+
+        if ( event.touches.length === 1 ) {
+
+            event.preventDefault();
+
+            mouseX = event.touches[ 0 ].pageX - windowHalfX;
+            mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+        }
+
+    }
+
+    document.addEventListener('mousemove', onDocumentMouseMove, false );
+    document.addEventListener('touchstart', onDocumentTouchStart, false );
+    document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+    document.addEventListener('keydown', onKeyDown, false);
 
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
 
@@ -115,18 +150,20 @@ function init() {
 
         for (var j = 0; j <= particles.length; j++){
             particle = particles[j++];
-            particle.position.z = (timeFrequencyData[j] / 8);
+            particle.position.z = (timeFrequencyData[j] / 10);
             particle.material.rotation += 0.00001;
+
+
+            // if (particle.position.z > 12){
+            //     particle.material.color.setHex(0xb798b1);
+            // }
+            // else {
+            //     particle.material.color.setHex(0xffffff);
+            // }
 
             // particle.position.x = particle.position.x - (mouseX * 0.00005);
             // particle.position.y = particle.position.y + (mouseY * 0.00005);
 
-            // if (j > 1012){
-            //     particle.position.x = (timeFrequencyData[j] / 7)
-            // }
-            // else {
-            //     particle.position.y = (timeFrequencyData[j] / 7)
-            // }
 
         }
 
