@@ -5,23 +5,24 @@ var width = window.innerWidth,
 
 var app = app || {};
 app.init = init;
-app.play = false;
+app.animate = animate;
+app.play = true;
 
 function init() {
 
     var container = document.createElement('div');
     document.body.appendChild(container);
 
-    camera = new THREE.PerspectiveCamera( 50, width / height, 1, 20000 );
+    camera = new THREE.PerspectiveCamera(50, width / height, 1, 20000);
     camera.position.z = 1150;
 
     scene = new THREE.Scene();
 
     renderer = new THREE.CanvasRenderer();
     renderer.setClearColor(0x000000, 1);
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( width, height );
-    container.appendChild( renderer.domElement );
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(width, height);
+    container.appendChild(renderer.domElement);
 
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
     // controls.enableRotate = false;
@@ -30,37 +31,13 @@ function init() {
     console.log(controls);
 
 
-    // AUDIO ANALYSER -- now in audioLoader.js
-    // var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // console.log('audioCtx');
-    // console.log(ctx);
-    //
-    // var audio = document.querySelector('audio');
-    // console.log('audio');
-    // console.log(audio);
-    //
-    // var audioSrc = ctx.createMediaElementSource(audio);
-    // console.log(audioSrc);
-    //
-    // var analyser = ctx.createAnalyser();
-    // // analyser.smoothingTimeConstant = 1;
-    // console.log('analyser');
-    // console.log(analyser);
-    //
-    // audioSrc.connect(analyser);
-    // analyser.connect(ctx.destination);
-
-    var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
-    // var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
-
     // LINES
     lines = new Array();
     for (var j = 0; j <= 1024; j++) {
 
         var geometry = new THREE.Geometry();
 
-        var vertex = new THREE.Vector3( Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1 );
+        var vertex = new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
         vertex.normalize();
         vertex.multiplyScalar(125);
 
@@ -71,8 +48,8 @@ function init() {
 
         geometry.vertices.push(vertex2);
 
-        var line = lines[ j ++ ] = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.65 } ) );
-        scene.add( line );
+        var line = lines[j++] = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0x000000, opacity: 0.65}));
+        scene.add(line);
         // console.log(lines[2]);
     }
 
@@ -80,12 +57,12 @@ function init() {
         switch (e.which) {
             case 32:
                 if (app.play) {
-                    // audio.pause();
-                    source.start();
+                    app.audio.pause();
+                    // source.start();
                     app.play = false;
                 } else {
-                    // audio.play();
-                    source.stop();
+                    app.audio.play();
+                    // source.stop();
                     app.play = true;
                 }
                 break;
@@ -96,77 +73,76 @@ function init() {
     }
 
     window.addEventListener('keydown', onKeyDown, false);
-    window.addEventListener('resize', onWindowResize, false );
+    window.addEventListener('resize', onWindowResize, false);
+}
+function animate() {
+    var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
+    // var timeFrequencyData = new Uint8Array(analyser.fftSize);
+    // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
+    requestAnimationFrame( animate );
+    analyser.getByteFrequencyData(uintFrequencyData);
+    // analyser.getByteTimeDomainData(timeFrequencyData);
+    // analyser.getFloatFrequencyData(floatFrequencyData);
 
-    function animate() {
+    for ( var j = 0; j <= 1024; j ++ ){
+        line = lines[j++];
+        var intensity = 5;
+        line.geometry.vertices[1].z = (uintFrequencyData[j] * intensity + 50);
+        line.geometry.vertices[0].z = -(uintFrequencyData[j]);
+        if (line.geometry.vertices[1].z > (13 * intensity) && line.geometry.vertices[1].z < (90 * intensity)){
+            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity);
 
-        requestAnimationFrame( animate );
+            // YELLOW
+            line.material.color.r = 1;
+            line.material.color.g = 0.75;
+            line.material.color.b = 0;
 
-        analyser.getByteFrequencyData(uintFrequencyData);
-        // analyser.getByteTimeDomainData(timeFrequencyData);
-        // analyser.getFloatFrequencyData(floatFrequencyData);
+            // FUCHSIA
+            // line.material.color.r = 1;
+            // line.material.color.g = 0;
+            // line.material.color.b = 0.5;
 
-        for ( var j = 0; j <= 1024; j ++ ){
-            line = lines[j++];
-            var intensity = 5;
-            line.geometry.vertices[1].z = (uintFrequencyData[j] * intensity + 50);
-            line.geometry.vertices[0].z = -(uintFrequencyData[j]);
-            if (line.geometry.vertices[1].z > (13 * intensity) && line.geometry.vertices[1].z < (90 * intensity)){
-                // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity);
-
-                // YELLOW
-                line.material.color.r = 1;
-                line.material.color.g = 0.75;
-                line.material.color.b = 0;
-
-                // FUCHSIA
-                // line.material.color.r = 1;
-                // line.material.color.g = 0;
-                // line.material.color.b = 0.5;
-
-                line.material.opacity = 0.65;
-            }
-            else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
-                // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity );
-
-                // RED
-                line.material.color.r = 1;
-                line.material.color.g = 0;
-                line.material.color.b = 0;
-
-                // MAGENTA
-                // line.material.color.r = 1;
-                // line.material.color.g = 0;
-                // line.material.color.b = 1;
-
-                line.material.opacity = 0.65;
-            }
-            else if (line.geometry.vertices[1].z >= (150 * intensity)){
-                // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity * intensity * intensity);
-
-                // FUCHSIA
-                line.material.color.r = 1;
-                line.material.color.g = 0;
-                line.material.color.b = 0.5;
-
-                // BLUE
-                // line.material.color.r = 0;
-                // line.material.color.g = 0;
-                // line.material.color.b = 1;
-
-                line.material.opacity = 0.65;
-            }
-            else {
-                line.material.color.r = 0;
-                line.material.color.g = 0;
-                line.material.color.b = 0;
-                line.material.opacity = 0;
-            }
+            line.material.opacity = 0.65;
         }
+        else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
+            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity );
 
-        render();
+            // RED
+            line.material.color.r = 1;
+            line.material.color.g = 0;
+            line.material.color.b = 0;
+
+            // MAGENTA
+            // line.material.color.r = 1;
+            // line.material.color.g = 0;
+            // line.material.color.b = 1;
+
+            line.material.opacity = 0.65;
+        }
+        else if (line.geometry.vertices[1].z >= (150 * intensity)){
+            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity * intensity * intensity);
+
+            // FUCHSIA
+            line.material.color.r = 1;
+            line.material.color.g = 0;
+            line.material.color.b = 0.5;
+
+            // BLUE
+            // line.material.color.r = 0;
+            // line.material.color.g = 0;
+            // line.material.color.b = 1;
+
+            line.material.opacity = 0.65;
+        }
+        else {
+            line.material.color.r = 0;
+            line.material.color.g = 0;
+            line.material.color.b = 0;
+            line.material.opacity = 0;
+        }
     }
-    animate();
+
+    render();
 }
 
 function onWindowResize() {

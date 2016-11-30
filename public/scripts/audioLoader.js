@@ -27,6 +27,7 @@ window.onload = function () {
     function initiateAudio(data) {
         app.audio = document.createElement('audio');
         app.audio.src = URL.createObjectURL(data);
+        app.audio.autoplay = true;
         document.body.appendChild(app.audio);
         ctx = new AudioContext();
         source = ctx.createMediaElementSource(app.audio);

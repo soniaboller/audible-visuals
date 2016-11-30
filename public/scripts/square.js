@@ -3,7 +3,7 @@ console.log('wave loaded');
 var app = app || {}
 app.init = init;
 app.animate = animate;
-app.play = false;
+app.play = true;
 
 var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
     mouseX = 0, mouseY = 0,
@@ -129,6 +129,7 @@ function init() {
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
 }
+
 
 function animate() {
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
