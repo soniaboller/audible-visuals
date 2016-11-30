@@ -14,6 +14,14 @@ audioCtrl.get('/sphere', function(req, res, next) {
   res.render('sphere',{ title: 'SPHERE'});
 });
 
+audioCtrl.get('/plane', function(req, res, next) {
+  res.render('plane',{ title: 'PLANE'});
+});
+
+audioCtrl.get('/square', function(req, res, next) {
+  res.render('square',{ title: 'SQUARE'});
+});
+
 audioCtrl.get('/', function(req, res, next) {
   res.render('audiovis',{ title: 'AUDVIZ'});
 });

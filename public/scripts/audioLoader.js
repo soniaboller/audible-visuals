@@ -50,9 +50,12 @@ window.onload = function () {
         console.log('this the the buffer source');
         //yoooo you can change the speed of the song!!!
         source.playbackRate.value = 1;
-        console.log(source);
+        console.log(source.length);
         ctx.decodeAudioData(data, function (buffer) {
             source.buffer = buffer;
+            // var channelData = buffer.getChannelData(buffer)
+            // var bufferArray = []
+            // bufferArray.push(channelData)
             createAudio();
         }, function (e) {
             console.log(e);
@@ -65,6 +68,8 @@ window.onload = function () {
             source.start();
             console.log(app);
             app.init();
+            // this does log the current time, but I'm not sure it's relevant
+            console.log(ctx.currentTime)
 
         }
 

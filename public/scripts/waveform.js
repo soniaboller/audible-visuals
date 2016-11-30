@@ -138,6 +138,7 @@ app.play = false;
 
         // var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
         var timeFrequencyData = new Uint8Array(analyser.fftSize);
+        console.log(analyser)
         // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
         window.addEventListener("keydown", onKeyDown, false);
