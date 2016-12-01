@@ -1,9 +1,10 @@
 console.log('wave loaded');
 
-var app = app || {}
+var app = app || {};
 app.init = init;
 app.animate = animate;
 app.play = true;
+app.animateParticles = animateParticles;
 
 var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
     mouseX = 0, mouseY = 0,
@@ -102,7 +103,6 @@ function init() {
         return false;
     }
 
-    // change e back to event if this stops working
     function onDocumentMouseMove(e) {
         mouseX = e.clientX - windowHalfX;
         mouseY = e.clientY - windowHalfY;
@@ -130,33 +130,41 @@ function init() {
     document.addEventListener('keydown', onKeyDown, false);
 }
 
-
 function animate() {
-    var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    var timeFloatData = new Float32Array(analyser.fftSize);
     requestAnimationFrame(animate);
-    analyser.getByteTimeDomainData(timeFrequencyData);
-    analyser.getFloatTimeDomainData(timeFloatData);
     // console.log(timeFloatData);
     // console.log(timeFrequencyData);
+    animateParticles();
+    camera.position.x = ( mouseX - camera.position.x ) * 0.05;
+    camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
+    camera.lookAt( scene.position );
+    renderer.render( scene, camera );
+}
+
+function animateParticles(){
+    // requestAnimationFrame(animateParticles);
+    var timeFrequencyData = new Uint8Array(analyser.fftSize);
+    var timeFloatData = new Float32Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(timeFrequencyData);
+    analyser.getFloatTimeDomainData(timeFloatData);
     for (var j = 0; j <= particles.length; j++){
         particle = particles[j++];
         particle.position.z = (timeFrequencyData[j] / 10);
         // particle.position.z = (timeFloatData[j] * 10);
 
-            // for when material is generated outside of loop
+        // for when material is generated outside of loop
         // particle.material.rotation += 0.00001;
 
-            // for when material is generated within first part of loop
+        // for when material is generated within first part of loop
         particle.material.rotation += 0.0003;
 
-            // for when material is generated within second part of loop
+        // for when material is generated within second part of loop
         // particle.material.rotation += 0.005;
 
 
         // var R = 1 - (timeFloatData[j]);
         // var G = 1 - (timeFloatData[j]);
-        // var B = 1;
+        // var B = 1 - (timeFloatData[j]);
         // particle.material.color.setRGB(R, G, B);
 
 
@@ -165,9 +173,4 @@ function animate() {
 
 
     }
-
-    camera.position.x = ( mouseX - camera.position.x ) * 0.05;
-    camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
-    camera.lookAt( scene.position );
-    renderer.render( scene, camera );
 }
