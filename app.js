@@ -28,8 +28,8 @@ app.use(require('node-sass-middleware')({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', controllers);
-app.use('/audiovis', audioapp);
+app.use('/ctrl', controllers);
+app.use('/', audioapp);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
