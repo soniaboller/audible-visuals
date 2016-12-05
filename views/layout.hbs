@@ -2,18 +2,48 @@
   <head>
       <title>{{title}}</title>
       <link rel='stylesheet' href='/styles/main.css' />
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+      <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>-->
       <meta http-equiv="Cache-control" content="no-store"/>
       <meta http-equiv="Cache-control" content="no-cache"/>
       <meta http-equiv="cache-control" content="max-age=0"/>
-      <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>-->
       <script src="/scripts/jquery.min.js"></script>
       <script src="/scripts/three.min.js"></script>
+      <script src="/scripts/dat.gui.min.js"></script>
+      <script src="/scripts/stats.min.js"></script>
+      <script src="/scripts/audioLoader.js"></script>
       <script src="/scripts/OrbitControls.js"></script>
       <script src="/scripts/CanvasRenderer.js"></script>
       <script src="/scripts/Projector.js"></script>
+
   </head>
   <body>
+  <nav>
+      <ul>
+          <li><a href="/sphere">SPHERE</a></li>
+          <li><a href="/square">SQUARE</a></li>
+          <li><a href="/waveform">WAVE</a></li>
+
+      </ul>
+  </nav>
+  <!--<audio id="audio-controls" src="/media/statues.mp3" controls="controls"></audio>-->
+  <!--<audio id="audio-controls" src="/media/cane.mp3"></audio>-->
     {{{body}}}
+  <script>
+      var nav = false;
+      function onKeyDown(e) {
+          switch (e.which) {
+              case 78:
+                  if(!nav){
+                      $('nav').css('visibility','visible');
+                      nav = !nav;
+                  }
+                  else {
+                      $('nav').css('visibility','hidden');
+                      nav = !nav;
+                  }
+          }
+      }
+      document.addEventListener('keydown', onKeyDown, false);
+  </script>
   </body>
 </html>

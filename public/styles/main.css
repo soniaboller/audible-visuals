@@ -4,6 +4,7 @@ body {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   overflow: hidden;
   background-color: #000;
+  color: white;
 }
 
 canvas{
@@ -13,4 +14,70 @@ canvas{
 
 #audio-controls{
   width: 100vw;
+}
+
+nav {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+  visibility: hidden;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*ul li {*/
+  /*padding: 0;*/
+  /*display: block;*/
+  /*margin: 1%;*/
+/*}*/
+
+a, a:active, a:hover, a:visited{
+  color: white;
+  text-decoration: none;
+}
+
+.dg .c .slider-fg {
+  background: #fff !important;
+}
+
+.dg .cr.number {
+  border-left: none !important;
+}
+
+.dg .cr.color {
+  border-left: none !important;
+}
+
+.dg .cr.boolean {
+  border-left: none !important;
+}
+
+.dg .cr.number input[type=text] {
+  color: #fff !important;
+}
+
+.dg li:not(.folder){
+  background: transparent !important;
+  border-bottom: none !important;
+}
+
+.dg.main .close-button{
+  background: transparent !important;
+}
+
+.dg.main .close-button.drag, .dg.main:hover .close-button {
+  background: transparent !important;
+}
+
+/*.dg .c .slider {*/
+  /*background: transparent !important;*/
+  /*cursor: ew-resize;*/
+/*}*/
+
+.dg .slider {
+  margin-left: 0 !important;
 }

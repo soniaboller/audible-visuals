@@ -19,6 +19,10 @@ console.log('/audiovis/waveform');
 console.log('/audiovis/sphere');
 console.log('press space bar to start locally stored music');
 app.set('port', port);
+console.log('server running on port ' + port);
+console.log('/audiovis');
+console.log('/audiovis/waveform');
+console.log('/audiovis/sphere');
 
 /**
  * Create HTTP server.
