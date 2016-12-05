@@ -25,8 +25,11 @@ function init() {
     container.appendChild(renderer.domElement);
 
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    // controls.enableRotate = false;
+    // controls.autoRotate = true;
+    controls.enablePan = false;
     controls.enableKeys = false;
+    // controls.minDistance = 10;
+    // controls.maxDistance = 50;
     console.log('controls');
     console.log(controls);
 
@@ -74,6 +77,9 @@ function init() {
 
     window.addEventListener('keydown', onKeyDown, false);
     window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener('mousedown', function(){
+        return false
+    });
 }
 
 var GuiControls = function(){

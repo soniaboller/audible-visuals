@@ -24,7 +24,7 @@ function init() {
     renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
 
-    camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 2000);
+    camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 3000);
     // camera.position.set(0, -450, 700);
 
     renderer.setClearColor(0x000000, 1);
@@ -144,9 +144,10 @@ var GuiControls = function(){
     this.color6 = 0x3333FF;
     this.color7 = 0xEE00EE;
     this.color8 = 0xCD3278;
-    this.cameraX = 0;
+    // this.cameraX = 0;
     this.cameraY = 0;
     this.cameraZ = 0;
+    // this.particleHeight = 0;
 };
 
 var waveform = new GuiControls();
@@ -161,9 +162,10 @@ gui.addColor(waveform, 'color5').name('Color 5');
 gui.addColor(waveform, 'color6').name('Color 6');
 gui.addColor(waveform, 'color7').name('Color 7');
 gui.addColor(waveform, 'color8').name('Color 8');
-gui.add(waveform, 'intensity', 0.5, 3).step(0.5);
-gui.add(waveform, 'cameraX', -500, 500);
-gui.add(waveform, 'cameraY', -500, 1000);
+gui.add(waveform, 'intensity', 0.5, 4).step(0.5);
+// gui.add(waveform, 'particleHeight', -500, 500);
+// gui.add(waveform, 'cameraX', -500, 500);
+gui.add(waveform, 'cameraY', -560, 1000);
 gui.add(waveform, 'cameraZ', 0, 1000);
 
 var stats = new Stats();
@@ -181,17 +183,30 @@ function animate() {
         // var intensity = 1;
         var particleHeight;
 
-            if (waveform.intensity >= 3){
-                particleHeight = 75;
+
+            if (waveform.intensity === 4){
+                particleHeight = 209;
             }
-            else if (waveform.intensity >= 2){
-                particleHeight = -50;
+            else if (waveform.intensity === 3.5){
+                particleHeight = 145;
             }
-            else if (waveform.intensity >= 1){
+            else if (waveform.intensity === 3){
+                particleHeight = 80;
+            }
+            else if (waveform.intensity === 2.5){
+                particleHeight = 16;
+            }
+            else if (waveform.intensity === 2){
+                particleHeight = -48;
+            }
+            else if (waveform.intensity === 1.5){
+                particleHeight = -111;
+            }
+            else if (waveform.intensity === 1){
                 particleHeight = -175;
             }
-            else if (waveform.intensity < 1){
-                particleHeight = -250;
+            else if (waveform.intensity === 0.5){
+                particleHeight = -239;
             }
 
         particle = particles[j++];
@@ -233,7 +248,7 @@ function animate() {
 
     // camera.rotation.x += -Math.sin(1)/500;
     // camera.rotation.z += -Math.sin(1)/500;
-    camera.position.x = waveform.cameraX;
+    // camera.position.x = waveform.cameraX;
     camera.position.y = waveform.cameraY - 450;
     camera.position.z = waveform.cameraZ + 700;
     renderer.render(scene, camera);
