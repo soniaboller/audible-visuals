@@ -134,24 +134,25 @@ var GuiControls = function(){
     this.rotation = 0.0005;
     this.intensity = 10;
     this.toggleColor = false;
-    // this.R = 1;
-    // this.B = 1;
-    // this.G = 1;
+    this.R = 1;
+    this.B = 1;
+    this.G = 1;
 };
 
 var square = new GuiControls();
 
 var gui = new dat.GUI();
-console.log(gui)
+console.log(gui);
 gui.closed = true;
 gui.add(square, 'rotation', -0.005, 0.005).name('Rotation');
 gui.add(square, 'intensity', 5, 15);
-gui.add(square, 'toggleColor').name('Toggle Grey');
+gui.add(square, 'toggleColor').name('Toggle Color');
 
-// var folder = gui.addFolder('Colors');
-// folder.add(square, 'R', 0, 1).name('R');
-// folder.add(square, 'G', 0, 1).name('G');
-// folder.add(square, 'B', 0, 1).name('B');
+var folder = gui.addFolder('Colors');
+folder.add(square, 'R', 0, 1).name('R');
+folder.add(square, 'G', 0, 1).name('G');
+folder.add(square, 'B', 0, 1).name('B');
+folder.open();
 
 var stats = new Stats();
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -179,9 +180,9 @@ function animateParticles(){
         // particle.position.z = (timeFloatData[j] * 10);
         particle.material.rotation += square.rotation;
         if (square.toggleColor) {
-            var R = 1 - (timeFloatData[j]);
-            var G = 1 - (timeFloatData[j]);
-            var B = 1 - (timeFloatData[j]);
+            var R = square.R - (timeFloatData[j]);
+            var G = square.G - (timeFloatData[j]);
+            var B = square.B - (timeFloatData[j]);
             particle.material.color.setRGB(R, G, B);
         }
         else {

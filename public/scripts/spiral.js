@@ -130,27 +130,52 @@ function init() {
 }
 
 var GuiControls = function(){
-    this.intensity = 0.5;
-    this.toggleColor = false;
+    this.intensity = 0.3;
+    // this.toggleColor = false;
+    // this.emphasis = {Red: true, Green: true, Blue: true};
+    this.toggleRed = true;
+    this.toggleGreen = false;
+    this.toggleBlue = false;
     this.fov = 30;
-    this.R = 1;
-    this.B = 1;
-    this.G = 1;
+    this.R = 0.5;
+    this.G = 0.2;
+    this.B = 0.7;
+    this.radius = 75;
 };
 
 var spiral = new GuiControls();
 
 var gui = new dat.GUI();
-console.log(gui)
+console.log(gui);
 gui.closed = true;
-gui.add(spiral, 'intensity', 0.05, 1);
-gui.add(spiral, 'fov', 20, 50).name('FOV');
-gui.add(spiral, 'toggleColor').name('Toggle Colors');
+gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
+gui.add(spiral, 'fov', 1, 50).name('Zoom Distance');
+gui.add(spiral, 'radius', 10, 100).name('Particle Spacing');
+// gui.add(spiral, 'toggleColor').name('Toggle Colors');
+// gui.add(spiral, 'emphasis', {Red: true, Green: true, Blue: true});
+gui.add(spiral, 'toggleRed').name('Red Emphasis').listen().onChange(function(){
+    spiral.toggleRed = true;
+    spiral.toggleGreen = false;
+    spiral.toggleBlue = false;
+});
+
+gui.add(spiral, 'toggleGreen').name('Green Emphasis').listen().onChange(function(){
+    spiral.toggleRed = false;
+    spiral.toggleGreen = true;
+    spiral.toggleBlue = false;
+});
+
+gui.add(spiral, 'toggleBlue').name('Blue Emphasis').listen().onChange(function(){
+    spiral.toggleRed = false;
+    spiral.toggleGreen = false;
+    spiral.toggleBlue = true;
+});
 
 var folder = gui.addFolder('Colors');
-folder.add(spiral, 'R', 0, 1).name('R');
-folder.add(spiral, 'G', 0, 1).name('G');
-folder.add(spiral, 'B', 0, 1).name('B');
+folder.add(spiral, 'R', 0, 1).name('Red');
+folder.add(spiral, 'G', 0, 1).name('Green');
+folder.add(spiral, 'B', 0, 1).name('Blue');
+folder.open();
 
 var stats = new Stats();
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -177,16 +202,30 @@ function animateParticles(){
     for (var j = 0; j <= particles.length; j++){
         particle = particles[j++];
         particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
-        if (spiral.toggleColor) {
-            // change the R to - for correctness, but this looks cooler?
+
+        if (spiral.toggleRed){
             var R = spiral.R + (timeFloatData[j]);
             var G = spiral.G - (timeFloatData[j]);
             var B = spiral.B - (timeFloatData[j]);
             particle.material.color.setRGB(R, G, B);
         }
+        else if (spiral.toggleGreen){
+            var R = spiral.R - (timeFloatData[j]);
+            var G = spiral.G + (timeFloatData[j]);
+            var B = spiral.B - (timeFloatData[j]);
+            particle.material.color.setRGB(R, G, B);
+        }
+        else if (spiral.toggleBlue){
+            var R = spiral.R - (timeFloatData[j]);
+            var G = spiral.G - (timeFloatData[j]);
+            var B = spiral.B + (timeFloatData[j]);
+            particle.material.color.setRGB(R, G, B);
+        }
         else {
             particle.material.color.setHex(0xffffff);
         }
+        particle.position.x = Math.sin(j) * (j / spiral.radius);
+        particle.position.y = Math.cos(j) * (j / spiral.radius);
     }
     camera.fov = spiral.fov;
     camera.updateProjectionMatrix();
