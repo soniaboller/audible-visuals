@@ -87,6 +87,7 @@ var GuiControls = function(){
     this.middleColor = 0xFF0000;
     this.outerColor = 0xFF0080;
     this.intensity = 5;
+    this.opacity = 0.65;
 };
 
 var sphere = new GuiControls();
@@ -96,7 +97,8 @@ gui.closed = true;
 gui.addColor(sphere, 'innerColor').name('Inner Color');
 gui.addColor(sphere, 'middleColor').name('Middle Color');
 gui.addColor(sphere, 'outerColor').name('Outer Color');
-gui.add(sphere, 'intensity', 0, 10).name('Intensity');
+gui.add(sphere, 'intensity', 4, 12).name('Intensity');
+gui.add(sphere, 'opacity', 0, 1).name('Opacity');
 
 var stats = new Stats();
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -130,7 +132,7 @@ function animate() {
             // line.material.color.g = 0;
             // line.material.color.b = 0.5;
 
-            line.material.opacity = 0.65;
+            line.material.opacity = sphere.opacity;
         }
         else if (line.geometry.vertices[1].z >= (90 * sphere.intensity) && line.geometry.vertices[1].z < (150 * sphere.intensity)){
             // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity );
@@ -145,7 +147,7 @@ function animate() {
             // line.material.color.g = 0;
             // line.material.color.b = 1;
 
-            line.material.opacity = 0.65;
+            line.material.opacity = sphere.opacity;
         }
         else if (line.geometry.vertices[1].z >= (150 * sphere.intensity)){
             // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity * sphere.intensity * sphere.intensity);
@@ -161,7 +163,7 @@ function animate() {
             // line.material.color.g = 0;
             // line.material.color.b = 1;
 
-            line.material.opacity = 0.65;
+            line.material.opacity = sphere.opacity;
         }
         else {
             line.material.color.r = 0;
