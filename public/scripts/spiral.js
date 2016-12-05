@@ -48,7 +48,7 @@ function init() {
 
     // move this into the particle generating loop for color changing, but prevents bottom tiles from being accessed for rotation
 
-    for (var i = 0; i < 2048; i++) {
+    for (var i = 0; i <= 2048; i++) {
         var material = new THREE.SpriteCanvasMaterial({
             color: 0xffffff,
             program: function (context) {
@@ -130,7 +130,6 @@ function init() {
 }
 
 var GuiControls = function(){
-    this.rotation = 0.0005;
     this.intensity = 0.5;
     this.toggleColor = false;
     this.fov = 30;
@@ -144,9 +143,8 @@ var spiral = new GuiControls();
 var gui = new dat.GUI();
 console.log(gui)
 gui.closed = true;
-gui.add(spiral, 'rotation', -0.005, 0.005).name('Rotation');
 gui.add(spiral, 'intensity', 0.05, 1);
-gui.add(spiral, 'fov', 20, 100).name('FOV');
+gui.add(spiral, 'fov', 20, 50).name('FOV');
 gui.add(spiral, 'toggleColor').name('Toggle Colors');
 
 var folder = gui.addFolder('Colors');
@@ -176,11 +174,11 @@ function animateParticles(){
     analyser.getByteTimeDomainData(timeFrequencyData);
     var timeFloatData = new Float32Array(analyser.fftSize);
     analyser.getFloatTimeDomainData(timeFloatData);
-    for (var j = 0; j < particles.length; j++){
+    for (var j = 0; j <= particles.length; j++){
         particle = particles[j++];
         particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
-        // particle.position.z = (timeFloatData[j] * 10);
         if (spiral.toggleColor) {
+            // change the R to - for correctness, but this looks cooler?
             var R = spiral.R + (timeFloatData[j]);
             var G = spiral.G - (timeFloatData[j]);
             var B = spiral.B - (timeFloatData[j]);

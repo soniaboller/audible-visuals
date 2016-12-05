@@ -17,6 +17,8 @@ console.log('server running on port ' + port);
 console.log('/square');
 console.log('/sphere');
 console.log('/waveform');
+console.log('/spiral');
+console.log('/line');
 console.log('drag and drop a song!');
 app.set('port', port);
 /**
