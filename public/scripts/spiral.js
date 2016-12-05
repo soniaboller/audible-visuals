@@ -6,7 +6,8 @@ app.animate = animate;
 app.play = true;
 app.animateParticles = animateParticles;
 
-var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
+
+var xSeparation = 1.05, ySeparation = 1.05, xNum = 64, yNum = 32,
     mouseX = 0, mouseY = 0,
     windowHalfX = window.innerWidth / 2,
     windowHalfY = window.innerHeight / 2;
@@ -19,7 +20,7 @@ function init() {
     var width = window.innerWidth;
     var height = window.innerHeight;
 
-    var fov = 25;
+    var fov = 20;
     // var fov = 60;
 
     renderer = new THREE.CanvasRenderer();
@@ -47,24 +48,22 @@ function init() {
 
     // move this into the particle generating loop for color changing, but prevents bottom tiles from being accessed for rotation
 
-    var i = 0;
-    for (var iy = 0; iy < yNum; iy++) {
-        var material = new THREE.SpriteMaterial({
-            color: 0xffffff
-            // program: function ( context ) {
-            //
-            //     context.beginPath();
-            //     context.arc( 0, 0, 0.25, 0, PI2, true );
-            //     context.fill();
-            //
-            // }
+    for (var i = 0; i < 2048; i++) {
+        var material = new THREE.SpriteCanvasMaterial({
+            color: 0xffffff,
+            program: function (context) {
+
+                context.beginPath();
+                context.arc(0, 0, 0.25, 0, PI2, true);
+                context.fill();
+
+            }
         });
-        for (var ix = 0; ix < xNum; ix++) {
-            var particle = particles[i++] = new THREE.Particle(material);
-            particle.position.x = ix * xSeparation - (( xNum * xSeparation ) / 2);
-            particle.position.y = iy * ySeparation - (( yNum * ySeparation ) / 2);
-            scene.add(particle);
-        }
+        var particle = particles[i++] = new THREE.Particle(material);
+        particle.position.x = Math.sin(i) * (i / 75);
+        particle.position.y = Math.cos(i) * (i / 75);
+        scene.add(particle);
+
     }
 
     var black = true;
@@ -124,7 +123,7 @@ function init() {
         }
     }
 
-    document.addEventListener('mousemove', onDocumentMouseMove, false);
+    // document.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
@@ -132,26 +131,28 @@ function init() {
 
 var GuiControls = function(){
     this.rotation = 0.0005;
-    this.intensity = 10;
+    this.intensity = 0.5;
     this.toggleColor = false;
-    // this.R = 1;
-    // this.B = 1;
-    // this.G = 1;
+    this.fov = 30;
+    this.R = 1;
+    this.B = 1;
+    this.G = 1;
 };
 
-var square = new GuiControls();
+var spiral = new GuiControls();
 
 var gui = new dat.GUI();
 console.log(gui)
 gui.closed = true;
-gui.add(square, 'rotation', -0.005, 0.005).name('Rotation');
-gui.add(square, 'intensity', 5, 15);
-gui.add(square, 'toggleColor').name('Toggle Grey');
+gui.add(spiral, 'rotation', -0.005, 0.005).name('Rotation');
+gui.add(spiral, 'intensity', 0.05, 1);
+gui.add(spiral, 'fov', 20, 100).name('FOV');
+gui.add(spiral, 'toggleColor').name('Toggle Colors');
 
-// var folder = gui.addFolder('Colors');
-// folder.add(square, 'R', 0, 1).name('R');
-// folder.add(square, 'G', 0, 1).name('G');
-// folder.add(square, 'B', 0, 1).name('B');
+var folder = gui.addFolder('Colors');
+folder.add(spiral, 'R', 0, 1).name('R');
+folder.add(spiral, 'G', 0, 1).name('G');
+folder.add(spiral, 'B', 0, 1).name('B');
 
 var stats = new Stats();
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -161,31 +162,34 @@ function animate() {
     requestAnimationFrame(animate);
     stats.begin();
     animateParticles();
-    camera.position.x = ( mouseX - camera.position.x ) * 0.05;
-    camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
+    // camera.position.x = ( mouseX - camera.position.x ) * 0.05;
+    // camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
     stats.end();
 }
 
 function animateParticles(){
+    // var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
+    // analyser.getByteFrequencyData(uintFrequencyData);
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    var timeFloatData = new Float32Array(analyser.fftSize);
     analyser.getByteTimeDomainData(timeFrequencyData);
+    var timeFloatData = new Float32Array(analyser.fftSize);
     analyser.getFloatTimeDomainData(timeFloatData);
-    for (var j = 0; j <= particles.length; j++){
+    for (var j = 0; j < particles.length; j++){
         particle = particles[j++];
-        particle.position.z = (timeFrequencyData[j] / square.intensity);
+        particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
         // particle.position.z = (timeFloatData[j] * 10);
-        particle.material.rotation += square.rotation;
-        if (square.toggleColor) {
-            var R = 1 - (timeFloatData[j]);
-            var G = 1 - (timeFloatData[j]);
-            var B = 1 - (timeFloatData[j]);
+        if (spiral.toggleColor) {
+            var R = spiral.R + (timeFloatData[j]);
+            var G = spiral.G - (timeFloatData[j]);
+            var B = spiral.B - (timeFloatData[j]);
             particle.material.color.setRGB(R, G, B);
         }
         else {
             particle.material.color.setHex(0xffffff);
         }
     }
+    camera.fov = spiral.fov;
+    camera.updateProjectionMatrix();
 }

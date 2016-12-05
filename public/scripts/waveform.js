@@ -1,13 +1,11 @@
 console.log('loaded');
 
-// $(document).ready(function() {
-
 var app = app || {};
 app.init = init;
 app.animate = animate;
 app.play = true;
 
-var scene, camera, renderer, controls,
+var scene, camera, renderer,
     mouseX = 0, mouseY = 0,
     windowHalfX = window.innerWidth / 2,
     windowHalfY = window.innerHeight / 2;
@@ -35,8 +33,6 @@ function init() {
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
     });
-
-    // var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     var PI2 = Math.PI * 2;
     particles = new Array();
@@ -92,7 +88,6 @@ function init() {
     }
 
 
-    // controls.autoRotate = false;
     function onKeyDown(e) {
         switch (e.which) {
             case 32:
@@ -125,9 +120,6 @@ function init() {
         mouseX = e.clientX - windowHalfX;
         mouseY = e.clientY - windowHalfY;
     }
-
-    // var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
-    // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
 
     window.addEventListener("keydown", onKeyDown, false);
     document.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -176,11 +168,8 @@ function animate() {
     requestAnimationFrame(animate);
     stats.begin();
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    // analyser.getByteFrequencyData(uintFrequencyData);
     analyser.getByteTimeDomainData(timeFrequencyData);
-    // analyser.getFloatFrequencyData(floatFrequencyData);
     for (var j = 0; j <= 2048; j++){
-        // var intensity = 1;
         var particleHeight;
 
 
@@ -242,24 +231,11 @@ function animate() {
             particle.position.y = (timeFrequencyData[j] * waveform.intensity  - (particleHeight + 525));
             particle.material.color.setHex(waveform.color8)
         }
-        // particle.material.color.setRGB(1,1 - timeFrequencyData[j]/255,1);
 
     }
-
-    // camera.rotation.x += -Math.sin(1)/500;
-    // camera.rotation.z += -Math.sin(1)/500;
-    // camera.position.x = waveform.cameraX;
     camera.position.y = waveform.cameraY - 450;
     camera.position.z = waveform.cameraZ + 700;
     renderer.render(scene, camera);
     camera.lookAt(scene.position);
-    // controls.target.set(0,0,0);
-    // controls.autoRotate = true;
-    // controls.update();
-    // controls.autoRotateSpeed = 1.5;
-    // controls.target.set(0,0,0);
-    // controls.update();
     stats.end()
 }
-
-// });

@@ -5,11 +5,7 @@ app.init = init;
 app.animate = animate;
 app.play = true;
 
-// $(document).ready(function() {
-
     var scene, camera, renderer;
-    // init();
-
     // particleSpace = 0.67
     // particleHeight = 0.67
     // cameraZ = 450
@@ -104,25 +100,6 @@ app.play = true;
             scene.add(particle3)
         }
 
-        // var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        // console.log('audioCtx');
-        // console.log(ctx);
-        //
-        // var audio = document.querySelector('audio');
-        // console.log('audio');
-        // console.log(audio);
-        //
-        // var audioSrc = ctx.createMediaElementSource(audio);
-        // console.log(audioSrc);
-        //
-        // var analyser = ctx.createAnalyser();
-        // // analyser.smoothingTimeConstant = 1;
-        // console.log('analyser');
-        // console.log(analyser);
-        //
-        // audioSrc.connect(analyser);
-        // analyser.connect(ctx.destination);
-
         function onKeyDown(e) {
             switch (e.which) {
                 case 32:
@@ -168,7 +145,7 @@ function animate() {
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     requestAnimationFrame(animate);
-    stats.begin()
+    stats.begin();
     analyser.getByteFrequencyData(uintFrequencyData);
     analyser.getByteTimeDomainData(timeFrequencyData);
     for (var i = 0; i <= 1024; i++){
@@ -196,4 +173,3 @@ function animate() {
     stats.end();
 }
 
-// });

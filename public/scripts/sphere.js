@@ -1,4 +1,3 @@
-// $(document).ready(function() {
 var width = window.innerWidth,
     height = window.innerHeight,
     camera, scene, renderer;
@@ -122,47 +121,17 @@ function animate() {
             // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity);
 
             line.material.color.setHex(sphere.innerColor);
-            // YELLOW
-            // line.material.color.r = 1;
-            // line.material.color.g = 0.75;
-            // line.material.color.b = 0;
-
-            // FUCHSIA
-            // line.material.color.r = 1;
-            // line.material.color.g = 0;
-            // line.material.color.b = 0.5;
-
             line.material.opacity = sphere.opacity;
         }
         else if (line.geometry.vertices[1].z >= (90 * sphere.intensity) && line.geometry.vertices[1].z < (150 * sphere.intensity)){
             // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity );
             line.material.color.setHex(sphere.middleColor);
-            // RED
-            // line.material.color.r = 1;
-            // line.material.color.g = 0;
-            // line.material.color.b = 0;
-
-            // MAGENTA
-            // line.material.color.r = 1;
-            // line.material.color.g = 0;
-            // line.material.color.b = 1;
-
             line.material.opacity = sphere.opacity;
         }
         else if (line.geometry.vertices[1].z >= (150 * sphere.intensity)){
             // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity * sphere.intensity * sphere.intensity);
 
             line.material.color.setHex(sphere.outerColor);
-            // FUCHSIA
-            // line.material.color.r = 1;
-            // line.material.color.g = 0;
-            // line.material.color.b = 0.5;
-
-            // BLUE
-            // line.material.color.r = 0;
-            // line.material.color.g = 0;
-            // line.material.color.b = 1;
-
             line.material.opacity = sphere.opacity;
         }
         else {
@@ -187,5 +156,3 @@ function render() {
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
 }
-
-// });

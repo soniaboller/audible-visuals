@@ -17,6 +17,11 @@ audioCtrl.get('/line', function(req, res, next) {
   res.render('lines',{ title: '— LINE —'});
 });
 
+audioCtrl.get('/spiral', function(req, res, next) {
+  res.render('spiral',{ title: 'SPIRAL'});
+});
+
+
 audioCtrl.get('/plane', function(req, res, next) {
   res.render('plane',{ title: 'PLANE'});
 });
