@@ -25,6 +25,10 @@ window.onload = function () {
     }
 
     function initiateAudio(data) {
+        if(app.audio){
+            app.audio.remove();
+            cancelAnimationFrame(animate);
+        }
         app.audio = document.createElement('audio');
         app.audio.src = URL.createObjectURL(data);
         app.audio.autoplay = true;
