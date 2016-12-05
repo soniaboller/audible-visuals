@@ -14,7 +14,7 @@ var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
 var camera, scene, renderer;
 
 function init() {
-    console.log('init')
+    console.log('init');
     scene = new THREE.Scene();
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -130,8 +130,35 @@ function init() {
     document.addEventListener('keydown', onKeyDown, false);
 }
 
+var GuiControls = function(){
+    this.rotation = 0.0005;
+    this.intensity = 10;
+    this.toggleColor = false;
+    // this.R = 1;
+    // this.B = 1;
+    // this.G = 1;
+};
+
+var square = new GuiControls();
+
+var gui = new dat.GUI();
+gui.closed = true;
+gui.add(square, 'rotation', -0.005, 0.005).name('Rotation');
+gui.add(square, 'intensity', 5, 15);
+gui.add(square, 'toggleColor').name('Toggle Grey');
+
+// var folder = gui.addFolder('Colors');
+// folder.add(square, 'R', 0, 1).name('R');
+// folder.add(square, 'G', 0, 1).name('G');
+// folder.add(square, 'B', 0, 1).name('B');
+
+var stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
+
 function animate() {
     requestAnimationFrame(animate);
+    stats.begin();
     // console.log(timeFloatData);
     // console.log(timeFrequencyData);
     animateParticles();
@@ -139,6 +166,7 @@ function animate() {
     camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
+    stats.end();
 }
 
 function animateParticles(){
@@ -149,23 +177,28 @@ function animateParticles(){
     analyser.getFloatTimeDomainData(timeFloatData);
     for (var j = 0; j <= particles.length; j++){
         particle = particles[j++];
-        particle.position.z = (timeFrequencyData[j] / 10);
+        particle.position.z = (timeFrequencyData[j] / square.intensity);
         // particle.position.z = (timeFloatData[j] * 10);
 
         // for when material is generated outside of loop
         // particle.material.rotation += 0.00001;
 
         // for when material is generated within first part of loop
-        particle.material.rotation += 0.0003;
+        particle.material.rotation += square.rotation;
 
         // for when material is generated within second part of loop
         // particle.material.rotation += 0.005;
 
+        if (square.toggleColor) {
+            var R = 1 - (timeFloatData[j]);
+            var G = 1 - (timeFloatData[j]);
+            var B = 1 - (timeFloatData[j]);
+            particle.material.color.setRGB(R, G, B);
+        }
+        else {
+            particle.material.color.setHex(0xffffff);
+        }
 
-        // var R = 1 - (timeFloatData[j]);
-        // var G = 1 - (timeFloatData[j]);
-        // var B = 1 - (timeFloatData[j]);
-        // particle.material.color.setRGB(R, G, B);
 
 
         // particle.position.x = particle.position.x - (mouseX * 0.00005);

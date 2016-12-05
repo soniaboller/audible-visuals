@@ -75,27 +75,49 @@ function init() {
     window.addEventListener('keydown', onKeyDown, false);
     window.addEventListener('resize', onWindowResize, false);
 }
+
+var GuiControls = function(){
+    this.innerColor = 0xFFF000;
+    this.middleColor = 0xFF0000;
+    this.outerColor = 0xFF0080;
+    this.intensity = 5;
+};
+
+var sphere = new GuiControls();
+
+var gui = new dat.GUI();
+gui.closed = true;
+gui.addColor(sphere, 'innerColor').name('Inner Color');
+gui.addColor(sphere, 'middleColor').name('Middle Color');
+gui.addColor(sphere, 'outerColor').name('Outer Color');
+gui.add(sphere, 'intensity', 0, 10).name('Intensity');
+
+var stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
+
 function animate() {
+    requestAnimationFrame( animate );
+    stats.begin();
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
     // var timeFrequencyData = new Uint8Array(analyser.fftSize);
     // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
-    requestAnimationFrame( animate );
     analyser.getByteFrequencyData(uintFrequencyData);
     // analyser.getByteTimeDomainData(timeFrequencyData);
     // analyser.getFloatFrequencyData(floatFrequencyData);
 
     for ( var j = 0; j <= 1024; j ++ ){
         line = lines[j++];
-        var intensity = 5;
-        line.geometry.vertices[1].z = (uintFrequencyData[j] * intensity + 50);
+        line.geometry.vertices[1].z = (uintFrequencyData[j] * sphere.intensity + 50);
         line.geometry.vertices[0].z = -(uintFrequencyData[j]);
-        if (line.geometry.vertices[1].z > (13 * intensity) && line.geometry.vertices[1].z < (90 * intensity)){
-            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity);
+        if (line.geometry.vertices[1].z > (13 * sphere.intensity) && line.geometry.vertices[1].z < (90 * sphere.intensity)){
+            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity);
 
+            line.material.color.setHex(sphere.innerColor);
             // YELLOW
-            line.material.color.r = 1;
-            line.material.color.g = 0.75;
-            line.material.color.b = 0;
+            // line.material.color.r = 1;
+            // line.material.color.g = 0.75;
+            // line.material.color.b = 0;
 
             // FUCHSIA
             // line.material.color.r = 1;
@@ -104,13 +126,14 @@ function animate() {
 
             line.material.opacity = 0.65;
         }
-        else if (line.geometry.vertices[1].z >= (90 * intensity) && line.geometry.vertices[1].z < (150 * intensity)){
-            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity );
+        else if (line.geometry.vertices[1].z >= (90 * sphere.intensity) && line.geometry.vertices[1].z < (150 * sphere.intensity)){
+            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity );
 
+            line.material.color.setHex(sphere.middleColor);
             // RED
-            line.material.color.r = 1;
-            line.material.color.g = 0;
-            line.material.color.b = 0;
+            // line.material.color.r = 1;
+            // line.material.color.g = 0;
+            // line.material.color.b = 0;
 
             // MAGENTA
             // line.material.color.r = 1;
@@ -119,13 +142,14 @@ function animate() {
 
             line.material.opacity = 0.65;
         }
-        else if (line.geometry.vertices[1].z >= (150 * intensity)){
-            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * intensity * intensity * intensity);
+        else if (line.geometry.vertices[1].z >= (150 * sphere.intensity)){
+            // line.geometry.vertices[0].z = -(uintFrequencyData[j] * sphere.intensity * sphere.intensity * sphere.intensity);
 
+            line.material.color.setHex(sphere.outerColor);
             // FUCHSIA
-            line.material.color.r = 1;
-            line.material.color.g = 0;
-            line.material.color.b = 0.5;
+            // line.material.color.r = 1;
+            // line.material.color.g = 0;
+            // line.material.color.b = 0.5;
 
             // BLUE
             // line.material.color.r = 0;
@@ -143,6 +167,7 @@ function animate() {
     }
 
     render();
+    stats.end();
 }
 
 function onWindowResize() {
