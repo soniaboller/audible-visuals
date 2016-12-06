@@ -34,7 +34,7 @@ window.onload = function () {
         app.audio.autoplay = true;
         app.play = true;
         document.body.appendChild(app.audio);
-        ctx = new AudioContext();
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
         source = ctx.createMediaElementSource(app.audio);
         analyser = ctx.createAnalyser();
         source.connect(ctx.destination);
