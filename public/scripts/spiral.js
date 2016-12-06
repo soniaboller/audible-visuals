@@ -3,7 +3,7 @@ console.log('wave loaded');
 var app = app || {};
 app.init = init;
 app.animate = animate;
-app.play = true;
+// app.play = true;
 app.animateParticles = animateParticles;
 
 
@@ -130,17 +130,17 @@ function init() {
 }
 
 var GuiControls = function(){
-    this.intensity = 0.3;
+    this.intensity = 0.25;
     // this.toggleColor = false;
     // this.emphasis = {Red: true, Green: true, Blue: true};
     this.toggleRed = true;
     this.toggleGreen = false;
     this.toggleBlue = false;
-    this.fov = 30;
-    this.R = 0.5;
-    this.G = 0.2;
+    this.fov = 25;
+    this.R = 0.7;
+    this.G = 0;
     this.B = 0.7;
-    this.radius = 75;
+    this.radius = 65;
 };
 
 var spiral = new GuiControls();
@@ -172,9 +172,9 @@ gui.add(spiral, 'toggleBlue').name('Blue Emphasis').listen().onChange(function()
 });
 
 var folder = gui.addFolder('Colors');
-folder.add(spiral, 'R', 0, 1).name('Red');
-folder.add(spiral, 'G', 0, 1).name('Green');
-folder.add(spiral, 'B', 0, 1).name('Blue');
+folder.add(spiral, 'R', 0, 1).name('Red').step(0.01);
+folder.add(spiral, 'G', 0, 1).name('Green').step(0.01);
+folder.add(spiral, 'B', 0, 1).name('Blue').step(0.01);
 folder.open();
 
 var stats = new Stats();
@@ -182,22 +182,18 @@ stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
 
 function animate() {
-    requestAnimationFrame(animate);
+    requestAnimationFrame(app.animate);
     stats.begin();
     animateParticles();
-    // camera.position.x = ( mouseX - camera.position.x ) * 0.05;
-    // camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
     stats.end();
 }
 
 function animateParticles(){
-    // var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
-    // analyser.getByteFrequencyData(uintFrequencyData);
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    analyser.getByteTimeDomainData(timeFrequencyData);
     var timeFloatData = new Float32Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(timeFrequencyData);
     analyser.getFloatTimeDomainData(timeFloatData);
     for (var j = 0; j <= particles.length; j++){
         particle = particles[j++];
@@ -224,6 +220,9 @@ function animateParticles(){
         else {
             particle.material.color.setHex(0xffffff);
         }
+        // if (!app.play){
+        //     particle.material.color.setHex(0x000000);
+        // }
         particle.position.x = Math.sin(j) * (j / spiral.radius);
         particle.position.y = Math.cos(j) * (j / spiral.radius);
     }

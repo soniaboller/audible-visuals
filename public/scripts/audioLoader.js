@@ -27,11 +27,12 @@ window.onload = function () {
     function initiateAudio(data) {
         if(app.audio){
             app.audio.remove();
-            cancelAnimationFrame(animate);
+            cancelAnimationFrame(app.animate);
         }
         app.audio = document.createElement('audio');
         app.audio.src = URL.createObjectURL(data);
         app.audio.autoplay = true;
+        app.play = true;
         document.body.appendChild(app.audio);
         ctx = new AudioContext();
         source = ctx.createMediaElementSource(app.audio);

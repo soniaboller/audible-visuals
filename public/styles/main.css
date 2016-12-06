@@ -87,3 +87,7 @@ a, a:active, a:hover, a:visited{
 .dg .slider {
   margin-left: 0 !important;
 }
+
+.dg.main .close-button {
+  text-align:right !important;
+}
