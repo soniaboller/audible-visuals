@@ -2,19 +2,19 @@ var express = require('express');
 var audioCtrl = express.Router();
 
 audioCtrl.get('/waveform', function(req, res, next) {
-  res.render('waveform',{ title: '~ WAVVEZ ~'});
+  res.render('waveform',{ title: 'WAVVEZ'});
 });
 
 audioCtrl.get('/sphere', function(req, res, next) {
-  res.render('sphere',{ title: '• SPHERE •'});
+  res.render('sphere',{ title: 'SPHERE'});
 });
 
 audioCtrl.get('/square', function(req, res, next) {
-  res.render('square',{ title: '[ ] SQUARE [ ]'});
+  res.render('square',{ title: 'SQUARE'});
 });
 
 audioCtrl.get('/line', function(req, res, next) {
-  res.render('lines',{ title: '— LINE —'});
+  res.render('lines',{ title: 'LINE'});
 });
 
 audioCtrl.get('/', function(req, res, next) {

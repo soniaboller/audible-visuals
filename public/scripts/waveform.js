@@ -160,13 +160,9 @@ gui.add(waveform, 'intensity', 0.5, 4).step(0.5);
 gui.add(waveform, 'cameraY', -560, 1000);
 gui.add(waveform, 'cameraZ', 0, 1000);
 
-var stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
-
 function animate() {
     requestAnimationFrame(animate);
-    stats.begin();
+    // stats.begin();
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(timeFrequencyData);
     for (var j = 0; j <= 2048; j++){
@@ -237,5 +233,5 @@ function animate() {
     camera.position.z = waveform.cameraZ + 700;
     renderer.render(scene, camera);
     camera.lookAt(scene.position);
-    stats.end()
+    // stats.end()
 }
