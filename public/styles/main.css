@@ -22,12 +22,12 @@ h1 {
   padding: 5%;
 }
 nav {
-  margin-left: 7%;
+  margin-left: 1%;
   margin-top: 1%;
   padding: 0;
   position: fixed;
   width: 100%;
-  visibility: hidden;
+  /*visibility: hidden;*/
 }
 ul {
   margin: 0;
@@ -46,7 +46,8 @@ ul {
   z-index: 10000;
   display: none;
   margin: 0 auto;
-  width: 18%;
+  width: 25%;
+  text-align: center;
   letter-spacing: 0.15rem;
   padding-top: 50vh;
   color: #fff;

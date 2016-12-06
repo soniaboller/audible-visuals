@@ -17,7 +17,7 @@ audioCtrl.get('/line', function(req, res, next) {
   res.render('lines',{ title: '— LINE —'});
 });
 
-audioCtrl.get('/spiral', function(req, res, next) {
+audioCtrl.get('/', function(req, res, next) {
   res.render('spiral',{ title: 'SPIRAL'});
 });
 

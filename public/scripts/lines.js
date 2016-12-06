@@ -137,15 +137,11 @@ app.play = true;
 // gui.add(lines, 'line2', -200, 200).name('Line 2');
 // gui.add(lines, 'line3', -200, 200).name('Line 3');
 
-var stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
-
 function animate() {
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     requestAnimationFrame(animate);
-    stats.begin();
+    // stats.begin();
     analyser.getByteFrequencyData(uintFrequencyData);
     analyser.getByteTimeDomainData(timeFrequencyData);
     for (var i = 0; i <= 1024; i++){
@@ -170,6 +166,6 @@ function animate() {
     camera.lookAt( scene.position );
     renderer.render(scene, camera);
     // controls.update();
-    stats.end();
+    // stats.end();
 }
 

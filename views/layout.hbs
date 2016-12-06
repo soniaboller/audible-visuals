@@ -29,9 +29,10 @@
       </ul>
   </nav>
     {{{body}}}
-  <p id="notification"> drag and drop a song!</p>
+  <p id="notification"> drag and drop a song! <br>
+  (press 'n' to toggle nav bar)</p>
   <script>
-      var nav = false;
+      var nav = true;
       function onKeyDown(e) {
           switch (e.which) {
               case 78:
@@ -47,6 +48,10 @@
       }
       document.addEventListener('keydown', onKeyDown, false);
       $('#notification').velocity('fadeIn', { delay: 250, duration: 1500 });
+
+//      var stats = new Stats();
+//      stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+//      document.body.appendChild( stats.dom );
   </script>
   </body>
 </html>

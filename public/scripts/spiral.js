@@ -179,17 +179,13 @@ folder.add(spiral, 'G', 0, 1).name('Green').step(0.01);
 folder.add(spiral, 'B', 0, 1).name('Blue').step(0.01);
 folder.open();
 
-var stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
-
 function animate() {
     requestAnimationFrame(app.animate);
-    stats.begin();
+    // stats.begin();
     animateParticles();
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
-    stats.end();
+    // stats.end();
 }
 
 function animateParticles(){

@@ -154,19 +154,15 @@ folder.add(square, 'G', 0, 1).name('G');
 folder.add(square, 'B', 0, 1).name('B');
 folder.open();
 
-var stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
-
 function animate() {
     requestAnimationFrame(animate);
-    stats.begin();
+    // stats.begin();
     animateParticles();
     camera.position.x = ( mouseX - camera.position.x ) * 0.05;
     camera.position.y = ( - mouseY - camera.position.y ) * 0.075;
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
-    stats.end();
+    // stats.end();
 }
 
 function animateParticles(){

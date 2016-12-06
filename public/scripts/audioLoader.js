@@ -14,12 +14,12 @@ window.onload = function () {
     function onDrag(e) {
         e.stopPropagation();
         e.preventDefault();
-        $('#notification').velocity('fadeOut', { duration: 1000 });
+        $('#notification').velocity('fadeOut', { duration: 250 });
+
         return false;
     }
 
     function onDrop(e) {
-        $('#notification').velocity('fadeOut', { duration: 1000 });
         e.stopPropagation();
         e.preventDefault();
         var droppedFiles = e.dataTransfer.files;

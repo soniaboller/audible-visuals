@@ -99,13 +99,9 @@ gui.addColor(sphere, 'outerColor').name('Outer Color');
 gui.add(sphere, 'intensity', 4, 12).name('Intensity');
 gui.add(sphere, 'opacity', 0, 1).name('Opacity');
 
-var stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
-
 function animate() {
     requestAnimationFrame( animate );
-    stats.begin();
+    // stats.begin();
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
     // var timeFrequencyData = new Uint8Array(analyser.fftSize);
     // var floatFrequencyData = new Float32Array(analyser.frequencyBinCount);
@@ -143,7 +139,7 @@ function animate() {
     }
 
     render();
-    stats.end();
+    // stats.end();
 }
 
 function onWindowResize() {
