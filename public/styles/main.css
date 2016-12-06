@@ -1,3 +1,5 @@
+/*media queries for mobile devices???*/
+
 body {
   padding: 0;
   margin: 0;
@@ -38,6 +40,17 @@ ul {
   display: inline;
   margin: 1%;
   letter-spacing: 0.25rem;
+}
+
+#notification {
+  z-index: 10000;
+  display: none;
+  margin: 0 auto;
+  width: 18%;
+  letter-spacing: 0.15rem;
+  padding-top: 50vh;
+  color: #fff;
+  font-weight: 100;
 }
 
 a, a:active, a:hover, a:visited{

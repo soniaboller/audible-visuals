@@ -2,15 +2,15 @@
   <head>
       <title>{{title}}</title>
       <link rel='stylesheet' href='/styles/main.css' />
-      <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>-->
       <meta http-equiv="Cache-control" content="no-store"/>
       <meta http-equiv="Cache-control" content="no-cache"/>
       <meta http-equiv="cache-control" content="max-age=0"/>
       <script src="/scripts/jquery.min.js"></script>
       <script src="/scripts/three.min.js"></script>
+      <script src="/scripts/velocity.min.js"></script>
+      <script src="/scripts/get-float-time-domain-data.js"></script>
       <script src="/scripts/dat.gui.min.js"></script>
       <script src="/scripts/stats.min.js"></script>
-      <script src="/scripts/get-float-time-domain-data.js"></script>
       <script src="/scripts/audioLoader.js"></script>
       <script src="/scripts/OrbitControls.js"></script>
       <script src="/scripts/CanvasRenderer.js"></script>
@@ -29,6 +29,7 @@
       </ul>
   </nav>
     {{{body}}}
+  <p id="notification"> drag and drop a song!</p>
   <script>
       var nav = false;
       function onKeyDown(e) {
@@ -45,9 +46,7 @@
           }
       }
       document.addEventListener('keydown', onKeyDown, false);
-//      $('input').mouseup(function(){
-//          $(this).blur();
-//      });
+      $('#notification').velocity('fadeIn', { delay: 250, duration: 1500 });
   </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-console.log('loaded');
+console.log('waveform loaded');
 
 var app = app || {};
 app.init = init;

@@ -1,4 +1,6 @@
-console.log('wave loaded');
+console.log('spiral loaded');
+
+// add a modal that tells user to upload a song
 
 var app = app || {};
 app.init = init;

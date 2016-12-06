@@ -1,4 +1,4 @@
-console.log('loaded');
+console.log('lines loaded');
 
 var app = app || {};
 app.init = init;

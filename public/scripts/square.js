@@ -1,4 +1,4 @@
-console.log('wave loaded');
+console.log('square loaded');
 
 var app = app || {};
 app.init = init;

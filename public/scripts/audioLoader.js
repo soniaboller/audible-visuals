@@ -14,10 +14,12 @@ window.onload = function () {
     function onDrag(e) {
         e.stopPropagation();
         e.preventDefault();
+        $('#notification').velocity('fadeOut', { duration: 1000 });
         return false;
     }
 
     function onDrop(e) {
+        $('#notification').velocity('fadeOut', { duration: 1000 });
         e.stopPropagation();
         e.preventDefault();
         var droppedFiles = e.dataTransfer.files;
@@ -31,7 +33,8 @@ window.onload = function () {
         }
         app.audio = document.createElement('audio');
         app.audio.src = URL.createObjectURL(data);
-        app.audio.autoplay = true;
+        // app.audio.autoplay = true;
+        app.audio.play();
         app.play = true;
         document.body.appendChild(app.audio);
         ctx = new (window.AudioContext || window.webkitAudioContext)();
