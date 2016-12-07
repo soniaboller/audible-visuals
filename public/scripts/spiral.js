@@ -175,7 +175,7 @@ spiralFolder.open();
 var wavySpiralFolder = gui.addFolder('Wavy Spiral Controls');
 wavySpiralFolder.add(spiral,'aWavy', 0, 50).step(0.01).name('Inner Radius');
 wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
-wavySpiralFolder.add(spiral,'wavyAngle', 1, 3).step(0.01).name('Angle');
+wavySpiralFolder.add(spiral,'wavyAngle', 1, 4).step(0.01).name('Angle');
 // wavySpiralFolder.open();
 
 var circleFolder = gui.addFolder('Cricle Controls');
@@ -209,11 +209,11 @@ colorFolder.open();
 
 function animate() {
     app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
-    stats.begin();
+    // stats.begin();
     animateParticles();
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
-    stats.end();
+    // stats.end();
 }
 
 function animateParticles(){
@@ -256,20 +256,20 @@ function animateParticles(){
         }
         else if (spiral.spiral){
             particle.position.x = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
-                                    * Math.sin( ((spiral.angle / 100) * j) );
+                                * Math.sin( ((spiral.angle / 100) * j) );
             particle.position.y = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
-                                    * Math.cos( ((spiral.angle / 100) * j) );
+                                * Math.cos( ((spiral.angle / 100) * j) );
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
             // counter clockwise if x = cos and y = sin, clockwise if x = sin and y = cos
             camera.position.y = 0;
         }
         else if(spiral.wavySpiral){
-            particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j ))
-                                    * Math.sin(( (spiral.wavyAngle / 100) * j))
-                                    + Math.sin(j / (spiral.wavyAngle / 100));
+            particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
+                                * Math.sin(( (spiral.wavyAngle / 100) * j))
+                                + Math.sin(j / (spiral.wavyAngle / 100));
             particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
-                                    * Math.cos(( (spiral.wavyAngle / 100) * j))
-                                    + Math.cos(j / (spiral.wavyAngle / 100));
+                                * Math.cos(( (spiral.wavyAngle / 100) * j))
+                                + Math.cos(j / (spiral.wavyAngle / 100));
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
 
             camera.position.y = 0;
