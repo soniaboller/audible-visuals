@@ -155,7 +155,7 @@ folder.add(square, 'B', 0, 1).name('B');
 folder.open();
 
 function animate() {
-    requestAnimationFrame(animate);
+    app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
     // stats.begin();
     animateParticles();
     camera.position.x = ( mouseX - camera.position.x ) * 0.05;

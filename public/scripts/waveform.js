@@ -161,7 +161,7 @@ gui.add(waveform, 'cameraY', -560, 1000);
 gui.add(waveform, 'cameraZ', 0, 1000);
 
 function animate() {
-    requestAnimationFrame(animate);
+    app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
     // stats.begin();
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(timeFrequencyData);

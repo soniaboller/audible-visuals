@@ -140,7 +140,7 @@ app.play = true;
 function animate() {
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
-    requestAnimationFrame(animate);
+    app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
     // stats.begin();
     analyser.getByteFrequencyData(uintFrequencyData);
     analyser.getByteTimeDomainData(timeFrequencyData);

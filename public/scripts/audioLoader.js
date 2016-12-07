@@ -29,7 +29,7 @@ window.onload = function () {
     function initiateAudio(data) {
         if(app.audio){
             app.audio.remove();
-            cancelAnimationFrame(app.animate);
+            window.cancelAnimationFrame(app.animationFrame);
         }
         app.audio = document.createElement('audio');
         app.audio.src = URL.createObjectURL(data);

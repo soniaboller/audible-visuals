@@ -9,8 +9,7 @@ app.animate = animate;
 app.animateParticles = animateParticles;
 
 
-var xSeparation = 1.05, ySeparation = 1.05, xNum = 64, yNum = 32,
-    mouseX = 0, mouseY = 0,
+var mouseX = 0, mouseY = 0,
     windowHalfX = window.innerWidth / 2,
     windowHalfY = window.innerHeight / 2;
 
@@ -23,7 +22,6 @@ function init() {
     var height = window.innerHeight;
 
     var fov = 20;
-    // var fov = 60;
 
     renderer = new THREE.CanvasRenderer();
     renderer.setSize(width, height);
@@ -31,7 +29,6 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(fov, width / height, 1, 10000);
     camera.position.set(0, 0, 175);
-    // camera.position.set(0, 0, 75);
 
     renderer.setClearColor(0x000000, 1);
     // CHANGE THIS into a function with an event lisenter instead
@@ -48,86 +45,45 @@ function init() {
     var PI2 = Math.PI * 2;
     particles = new Array();
 
-    // move this into the particle generating loop for color changing, but prevents bottom tiles from being accessed for rotation
-
-    // for (var i = 0; i <= 2048; i++) {
-    //     var material = new THREE.SpriteCanvasMaterial({
-    //         color: 0xffffff,
-    //         program: function (context) {
-    //
-    //             context.beginPath();
-    //             context.arc(0, 0, 0.25, 0, PI2, true);
-    //             context.fill();
-    //
-    //         }
-    //     });
-    //     var particle = particles[i++] = new THREE.Particle(material);
-    //     particle.position.x = Math.sin(i) * (i / 75);
-    //     particle.position.y = Math.cos(i) * (i / 75);
-    //     scene.add(particle);
-    // }
-
     for (var i = 0; i <=2048; i++) {
-        var a = 1;
-        var b = 1;
         var material = new THREE.SpriteCanvasMaterial({
             color: 0xffffff,
             program: function (context) {
-
                 context.beginPath();
                 context.arc(0, 0, 0.25, 0, PI2, true);
                 context.fill();
-
             }
         });
-        // var angle = 0.03;
         var particle = particles[i++] = new THREE.Particle(material);
-        // particle.position.x = (a + b * (angle * i)) * Math.cos((angle * i));
-        // particle.position.y = (a + b * (angle * i)) * Math.sin((angle * i));
         scene.add(particle);
-
     }
-
-    var black = true;
 
     function onKeyDown(e) {
         switch (e.which) {
             case 32:
                 if (app.play) {
                     app.audio.pause();
-                    // source.start();
                     app.play = false;
                 } else {
                     app.audio.play();
-                    // source.stop();
                     app.play = true;
                 }
                 break;
-            case 84:
-                if (black) {
-                    renderer.setClearColor(0xffffff, 1);
-                    for (var i = 0; i <= particles.length; i++) {
-                        particle = particles[i++];
-                        particle.material.color.setHex(0x000000);
-                    }
-                    black = false
+            case 67:
+                if (gui.closed){
+                    gui.closed = false;
                 }
                 else {
-                    renderer.setClearColor(0x000000, 1);
-                    for (var i = 0; i <= particles.length; i++) {
-                        particle = particles[i++];
-                        particle.material.color.setHex(0xffffff);
-                    }
-                    black = true
+                    gui.closed = true;
                 }
         }
         return false;
     }
 
-    function onDocumentMouseMove(e) {
-        mouseX = e.clientX - windowHalfX;
-        mouseY = e.clientY - windowHalfY;
-    }
+    // function onDocumentMouseMove(e) {
+    //     mouseX = e.clientX - windowHalfX;
+    //     mouseY = e.clientY - windowHalfY;
+    // }
 
     function onDocumentTouchStart(e) {
         if (e.touches.length === 1) {
@@ -156,8 +112,6 @@ function init() {
 
 var GuiControls = function(){
     this.intensity = 0.25;
-    // this.toggleColor = false;
-    // this.emphasis = {Red: true, Green: true, Blue: true};
     this.toggleRed = true;
     this.toggleGreen = false;
     this.toggleBlue = false;
@@ -172,18 +126,19 @@ var GuiControls = function(){
     this.aWavy = 1.20;
     this.bWavy = 0.66;
     this.wavyAngle = 2.46;
+    this.spiral = true;
+    this.wavySpiral = false;
     this.circle = false;
-    this.spiral = false;
-    this.wavySpiral = true;
 };
 
 var spiral = new GuiControls();
 
 var gui = new dat.GUI();
-console.log(gui);
 gui.closed = true;
 gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
 gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
+
+// visualizer type checkboxes
 gui.add(spiral, 'spiral').name('Spiral').listen().onChange(function(){
     spiral.circle = false;
     spiral.spiral = true;
@@ -209,24 +164,24 @@ gui.add(spiral, 'circle').name('Circle').listen().onChange(function(){
     circleFolder.open();
     wavySpiralFolder.close();
 });
+
+// selected visualizer controls folder
 var spiralFolder = gui.addFolder('Spiral Controls');
 spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Inner Radius');
 spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Outer Radius');
 spiralFolder.add(spiral,'angle', 0, 50).step(.01).name('Angle');
+spiralFolder.open();
 
 var wavySpiralFolder = gui.addFolder('Wavy Spiral Controls');
 wavySpiralFolder.add(spiral,'aWavy', 0, 50).step(0.01).name('Inner Radius');
 wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
 wavySpiralFolder.add(spiral,'wavyAngle', 1, 3).step(0.01).name('Angle');
-wavySpiralFolder.open();
+// wavySpiralFolder.open();
 
 var circleFolder = gui.addFolder('Cricle Controls');
 circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
-// gui.add(spiral,'a', 0, 50).step(0.01).name('Spiral Inner Radius');
-// gui.add(spiral,'b', 0, 5).step(0.01).name('Spiral Diameter');
-// gui.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Spiral Angle');
-// gui.add(spiral, 'toggleColor').name('Toggle Colors');
-// gui.add(spiral, 'emphasis', {Red: true, Green: true, Blue: true});
+
+// color emphasis checkbox
 gui.add(spiral, 'toggleRed').name('Red Emphasis').listen().onChange(function(){
     spiral.toggleRed = true;
     spiral.toggleGreen = false;
@@ -245,14 +200,15 @@ gui.add(spiral, 'toggleBlue').name('Blue Emphasis').listen().onChange(function()
     spiral.toggleBlue = true;
 });
 
-var folder = gui.addFolder('Colors');
-folder.add(spiral, 'R', 0, 1).name('Red').step(0.01);
-folder.add(spiral, 'G', 0, 1).name('Green').step(0.01);
-folder.add(spiral, 'B', 0, 1).name('Blue').step(0.01);
-folder.open();
+// color controls
+var colorFolder = gui.addFolder('Colors');
+colorFolder.add(spiral, 'R', 0, 1).name('Red').step(0.01);
+colorFolder.add(spiral, 'G', 0, 1).name('Green').step(0.01);
+colorFolder.add(spiral, 'B', 0, 1).name('Blue').step(0.01);
+colorFolder.open();
 
 function animate() {
-    requestAnimationFrame(app.animate);
+    app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
     stats.begin();
     animateParticles();
     camera.lookAt( scene.position );
@@ -299,37 +255,23 @@ function animateParticles(){
             camera.position.y = 100;
         }
         else if (spiral.spiral){
-            // counter clockwise if x = cos and y = sin, clockwise if x = sin and y = cos
             particle.position.x = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
                                     * Math.sin( ((spiral.angle / 100) * j) );
             particle.position.y = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
                                     * Math.cos( ((spiral.angle / 100) * j) );
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
+            // counter clockwise if x = cos and y = sin, clockwise if x = sin and y = cos
             camera.position.y = 0;
         }
         else if(spiral.wavySpiral){
-            // Math.tan( j +1 )
-
             particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j ))
                                     * Math.sin(( (spiral.wavyAngle / 100) * j))
                                     + Math.sin(j / (spiral.wavyAngle / 100));
             particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
                                     * Math.cos(( (spiral.wavyAngle / 100) * j))
                                     + Math.cos(j / (spiral.wavyAngle / 100));
-
-            // particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
-            //                         * Math.sin( ((spiral.wavyAngle / 100 * j)) + Math.atan(j / (spiral.wavyAngle / 100)) ));
-            // particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
-            //                         * Math.cos( ((spiral.wavyAngle / 100 * j)) + Math.atan(j / (spiral.wavyAngle / 100)) ));
-
-
-            // particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
-            //                         * Math.sin( ((spiral.wavyAngle / 100 * j ) + Math.tan( 1 + j) ) ));
-
-            // particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
-            //                         * Math.cos( ((spiral.wavyAngle / 100 * j ) + Math.tan( 1 + j) ) ));
-
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
+
             camera.position.y = 0;
         }
         else {

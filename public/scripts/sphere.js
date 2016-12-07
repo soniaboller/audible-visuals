@@ -100,7 +100,7 @@ gui.add(sphere, 'intensity', 4, 12).name('Intensity');
 gui.add(sphere, 'opacity', 0, 1).name('Opacity');
 
 function animate() {
-    requestAnimationFrame( animate );
+    app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
     // stats.begin();
     var uintFrequencyData = new Uint8Array(analyser.frequencyBinCount);
     // var timeFrequencyData = new Uint8Array(analyser.fftSize);
