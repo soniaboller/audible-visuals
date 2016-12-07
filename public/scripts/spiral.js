@@ -178,17 +178,29 @@ gui.closed = true;
 gui.add(spiral, 'spiral').name('Spiral').listen().onChange(function(){
     spiral.circle = false;
     spiral.spiral = true;
+    spiralFolder.open();
+    circleFolder.close();
+
 });
 gui.add(spiral, 'circle').name('Circle').listen().onChange(function(){
     spiral.circle = true;
     spiral.spiral = false;
+    spiralFolder.close();
+    circleFolder.open();
 });
 gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
 gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
-gui.add(spiral, 'radius', 10, 100).name('Circle Radius');
-gui.add(spiral,'a', 0, 50).step(0.01).name('Spiral Inner Radius');
-gui.add(spiral,'b', 0, 5).step(0.01).name('Spiral Diameter');
-gui.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Spiral Angle');
+var spiralFolder = gui.addFolder('Spiral Controls');
+spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Spiral Inner Radius');
+spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Spiral Diameter');
+spiralFolder.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Spiral Angle');
+spiralFolder.open();
+
+var circleFolder = gui.addFolder('Cricle Controls');
+circleFolder.add(spiral, 'radius', 10, 100).name('Circle Radius');
+// gui.add(spiral,'a', 0, 50).step(0.01).name('Spiral Inner Radius');
+// gui.add(spiral,'b', 0, 5).step(0.01).name('Spiral Diameter');
+// gui.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Spiral Angle');
 // gui.add(spiral, 'toggleColor').name('Toggle Colors');
 // gui.add(spiral, 'emphasis', {Red: true, Green: true, Blue: true});
 gui.add(spiral, 'toggleRed').name('Red Emphasis').listen().onChange(function(){
