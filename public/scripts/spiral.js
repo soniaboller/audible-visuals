@@ -125,9 +125,9 @@ var GuiControls = function(){
     this.angle = 11;
     this.aWavy = 1.20;
     this.bWavy = 0.66;
-    this.wavyAngle = 2.46;
-    this.spiral = true;
-    this.wavySpiral = false;
+    this.wavyAngle = 2.44;
+    this.spiral = false;
+    this.wavySpiral = true;
     this.circle = false;
 };
 
@@ -170,13 +170,13 @@ var spiralFolder = gui.addFolder('Spiral Controls');
 spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Inner Radius');
 spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Outer Radius');
 spiralFolder.add(spiral,'angle', 0, 50).step(.01).name('Angle');
-spiralFolder.open();
+// spiralFolder.open();
 
 var wavySpiralFolder = gui.addFolder('Wavy Spiral Controls');
 wavySpiralFolder.add(spiral,'aWavy', 0, 50).step(0.01).name('Inner Radius');
 wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
 wavySpiralFolder.add(spiral,'wavyAngle', 1, 4).step(0.01).name('Angle');
-// wavySpiralFolder.open();
+wavySpiralFolder.open();
 
 var circleFolder = gui.addFolder('Cricle Controls');
 circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
@@ -207,13 +207,17 @@ colorFolder.add(spiral, 'G', 0, 1).name('Green').step(0.01);
 colorFolder.add(spiral, 'B', 0, 1).name('Blue').step(0.01);
 colorFolder.open();
 
+
+console.log(spiral, 'this is the spiral')
+
+
 function animate() {
     app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
-    // stats.begin();
+    stats.begin();
     animateParticles();
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
-    // stats.end();
+    stats.end();
 }
 
 function animateParticles(){
@@ -247,6 +251,7 @@ function animateParticles(){
         // if (!app.play){
         //     particle.material.color.setHex(0x000000);
         // }
+
         if (spiral.circle){
             particle.position.x = Math.sin(j) * (j / (j/spiral.radius));
             particle.position.y = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
@@ -280,9 +285,50 @@ function animateParticles(){
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
             camera.position.y = 0;
         }
-
     }
     camera.fov = spiral.fov;
     // controls.update();
     camera.updateProjectionMatrix();
+    checkVisualizer();
+}
+function checkVisualizer(){
+    var spiralAngle, wavyAngle, circleRadius;
+    if(spiral.spiral){
+        console.log('hit spiral');
+        function changeAngle(){
+            var spiralAngle = window.setInterval(function(){
+                spiral.angle += 0.000001;
+            }, 10)
+        }
+        changeAngle();
+        clearInterval(wavyAngle);
+        clearInterval(circleRadius);
+    }
+    else if (spiral.wavySpiral){
+        function changeWavyAngle(){
+            var wavyAngle = window.setInterval(function(){
+                if(spiral.wavyAngle <= 2.5){
+                    spiral.wavyAngle += 0.00000003;
+                }
+                else{
+                    console.log('direction swtich');
+                    spiral.wavyAngle -= 0.00000005;
+                }
+            }, 10)
+        }
+        changeWavyAngle();
+        clearInterval(spiralAngle);
+        clearInterval(circleRadius);
+    }
+    else if (spiral.circle){
+        function changeCircleRadius(){
+            console.log('hit circle radius');
+            var circleRadius = window.setInterval(function(){
+                spiral.radius += 0.001;
+            },10)
+        }
+        changeCircleRadius();
+        clearInterval(wavyAngle);
+        clearInterval(spiralAngle);
+    }
 }

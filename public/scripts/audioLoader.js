@@ -37,11 +37,15 @@ window.onload = function () {
         // app.audio.play();
         app.play = true;
         document.body.appendChild(app.audio);
-        ctx = new (window.AudioContext || window.webkitAudioContext)();
-        source = ctx.createMediaElementSource(app.audio);
-        analyser = ctx.createAnalyser();
-        source.connect(ctx.destination);
+        app.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        source = app.ctx.createMediaElementSource(app.audio);
+        analyser = app.ctx.createAnalyser();
+        source.connect(app.ctx.destination);
         source.connect(analyser);
+        console.log(app.ctx, 'context')
+        console.log(analyser, '---analyser')
+        console.log(source, '-------source')
+
         app.animate();
     }
 };
