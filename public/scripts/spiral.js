@@ -106,7 +106,7 @@ function init() {
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
 
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    // controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 }
 
@@ -283,6 +283,6 @@ function animateParticles(){
 
     }
     camera.fov = spiral.fov;
-    controls.update();
+    // controls.update();
     camera.updateProjectionMatrix();
 }
