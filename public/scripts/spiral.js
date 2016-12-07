@@ -191,13 +191,13 @@ gui.add(spiral, 'circle').name('Circle').listen().onChange(function(){
 gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
 gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
 var spiralFolder = gui.addFolder('Spiral Controls');
-spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Spiral Inner Radius');
-spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Spiral Diameter');
-spiralFolder.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Spiral Angle');
+spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Inner Radius');
+spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Outer Radius');
+spiralFolder.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Angle');
 spiralFolder.open();
 
 var circleFolder = gui.addFolder('Cricle Controls');
-circleFolder.add(spiral, 'radius', 10, 100).name('Circle Radius');
+circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
 // gui.add(spiral,'a', 0, 50).step(0.01).name('Spiral Inner Radius');
 // gui.add(spiral,'b', 0, 5).step(0.01).name('Spiral Diameter');
 // gui.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Spiral Angle');

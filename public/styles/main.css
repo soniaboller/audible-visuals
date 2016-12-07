@@ -105,3 +105,13 @@ a, a:active, a:hover, a:visited{
 .dg.main .close-button {
   text-align:right !important;
 }
+
+.dg li.title{
+  background: transparent url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat !important;
+}
+
+.dg .closed li.title {
+  background: transparent url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlGIWqMCbWAEAOw==) 6px 10px no-repeat !important;
+}
+
+
