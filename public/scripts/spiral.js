@@ -149,6 +149,9 @@ function init() {
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
+
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
+
 }
 
 var GuiControls = function(){
@@ -274,10 +277,25 @@ function animateParticles(){
             camera.fov = 35;
             camera.position.y = 100;
         }
-        else if (spiral.spiral){
+        else if (spiral.vortex){
             // counter clockwise if x = cos and y = sin, clockwise if x = sin and y = cos
-            particle.position.x = (spiral.a + spiral.b * (spiral.angle * j)) * Math.sin((spiral.angle * j));
-            particle.position.y = (spiral.a + spiral.b * (spiral.angle * j)) * Math.cos((spiral.angle * j));
+            particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) );
+            particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) );
+            particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
+            camera.position.y = 0;
+        }
+        else if(spiral.spiral){
+            // Math.tan( j +1 )
+
+            particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) ) + Math.sin( j/spiral.angle);
+            particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) ) + Math.cos( j/spiral.angle);
+
+            // particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) ) + Math.sin( j);
+            // particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) ) + Math.cos( j);
+
+
+            // particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) + Math.tan( 1 + j) );
+            // particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) + Math.tan( 1 + j) );
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
             camera.position.y = 0;
         }
@@ -290,5 +308,6 @@ function animateParticles(){
 
     }
     camera.fov = spiral.fov;
+    controls.update();
     camera.updateProjectionMatrix();
 }

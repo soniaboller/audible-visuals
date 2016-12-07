@@ -14,7 +14,7 @@ window.onload = function () {
     function onDrag(e) {
         e.stopPropagation();
         e.preventDefault();
-        $('#notification').velocity('fadeOut', { duration: 250 });
+        $('#notification').velocity('fadeOut', { duration: 150 });
 
         return false;
     }
@@ -33,8 +33,8 @@ window.onload = function () {
         }
         app.audio = document.createElement('audio');
         app.audio.src = URL.createObjectURL(data);
-        // app.audio.autoplay = true;
-        app.audio.play();
+        app.audio.autoplay = true;
+        // app.audio.play();
         app.play = true;
         document.body.appendChild(app.audio);
         ctx = new (window.AudioContext || window.webkitAudioContext)();
