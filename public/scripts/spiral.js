@@ -167,10 +167,14 @@ var GuiControls = function(){
     this.B = 0.7;
     this.radius = 50;
     this.a = 0.15;
-    this.b = 0.2;
-    this.angle = 0.11;
+    this.b = 0.20;
+    this.angle = 11;
+    this.aWavy = 1.20;
+    this.bWavy = 0.66;
+    this.wavyAngle = 2.46;
     this.circle = false;
-    this.spiral = true;
+    this.spiral = false;
+    this.wavySpiral = true;
 };
 
 var spiral = new GuiControls();
@@ -178,26 +182,43 @@ var spiral = new GuiControls();
 var gui = new dat.GUI();
 console.log(gui);
 gui.closed = true;
+gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
+gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
 gui.add(spiral, 'spiral').name('Spiral').listen().onChange(function(){
     spiral.circle = false;
     spiral.spiral = true;
+    spiral.wavySpiral = false;
     spiralFolder.open();
     circleFolder.close();
+    wavySpiralFolder.close();
 
+});
+gui.add(spiral, 'wavySpiral').name('Wavy Spiral').listen().onChange(function(){
+    spiral.circle = false;
+    spiral.spiral = false;
+    spiral.wavySpiral = true;
+    spiralFolder.close();
+    circleFolder.close();
+    wavySpiralFolder.open();
 });
 gui.add(spiral, 'circle').name('Circle').listen().onChange(function(){
     spiral.circle = true;
     spiral.spiral = false;
+    spiral.wavySpiral = false;
     spiralFolder.close();
     circleFolder.open();
+    wavySpiralFolder.close();
 });
-gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
-gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
 var spiralFolder = gui.addFolder('Spiral Controls');
 spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Inner Radius');
 spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Outer Radius');
-spiralFolder.add(spiral,'angle', 0.001, 0.5).step(0.001).name('Angle');
-spiralFolder.open();
+spiralFolder.add(spiral,'angle', 0, 50).step(.01).name('Angle');
+
+var wavySpiralFolder = gui.addFolder('Wavy Spiral Controls');
+wavySpiralFolder.add(spiral,'aWavy', 0, 50).step(0.01).name('Inner Radius');
+wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
+wavySpiralFolder.add(spiral,'wavyAngle', 1, 3).step(0.01).name('Angle');
+wavySpiralFolder.open();
 
 var circleFolder = gui.addFolder('Cricle Controls');
 circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
@@ -277,25 +298,37 @@ function animateParticles(){
             camera.fov = 35;
             camera.position.y = 100;
         }
-        else if (spiral.vortex){
+        else if (spiral.spiral){
             // counter clockwise if x = cos and y = sin, clockwise if x = sin and y = cos
-            particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) );
-            particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) );
+            particle.position.x = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
+                                    * Math.sin( ((spiral.angle / 100) * j) );
+            particle.position.y = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
+                                    * Math.cos( ((spiral.angle / 100) * j) );
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
             camera.position.y = 0;
         }
-        else if(spiral.spiral){
+        else if(spiral.wavySpiral){
             // Math.tan( j +1 )
 
-            particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) ) + Math.sin( j/spiral.angle);
-            particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) ) + Math.cos( j/spiral.angle);
+            particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j ))
+                                    * Math.sin(( (spiral.wavyAngle / 100) * j))
+                                    + Math.sin(j / (spiral.wavyAngle / 100));
+            particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
+                                    * Math.cos(( (spiral.wavyAngle / 100) * j))
+                                    + Math.cos(j / (spiral.wavyAngle / 100));
 
-            // particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) ) + Math.sin( j);
-            // particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) ) + Math.cos( j);
+            // particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
+            //                         * Math.sin( ((spiral.wavyAngle / 100 * j)) + Math.atan(j / (spiral.wavyAngle / 100)) ));
+            // particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
+            //                         * Math.cos( ((spiral.wavyAngle / 100 * j)) + Math.atan(j / (spiral.wavyAngle / 100)) ));
 
 
-            // particle.position.x = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.sin( ( spiral.angle * j ) + Math.tan( 1 + j) );
-            // particle.position.y = ( spiral.a + spiral.b * ( spiral.angle * j ) ) * Math.cos( ( spiral.angle * j ) + Math.tan( 1 + j) );
+            // particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
+            //                         * Math.sin( ((spiral.wavyAngle / 100 * j ) + Math.tan( 1 + j) ) ));
+
+            // particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100 * j))
+            //                         * Math.cos( ((spiral.wavyAngle / 100 * j ) + Math.tan( 1 + j) ) ));
+
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
             camera.position.y = 0;
         }
