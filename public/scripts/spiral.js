@@ -124,20 +124,21 @@ var GuiControls = function(){
     this.b = 0.20;
     this.angle = 11;
     this.aWavy = 1.20;
-    this.bWavy = 0.66;
+    this.bWavy = 0.76;
     this.wavyAngle = 2.44;
     this.spiral = false;
     this.wavySpiral = true;
     this.circle = false;
+    // this.animate = false;
 };
 
 var spiral = new GuiControls();
 
 var gui = new dat.GUI();
 gui.closed = true;
+// gui.add(spiral, 'animate').name('ANIMATE');
 gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
 gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
-
 // visualizer type checkboxes
 gui.add(spiral, 'spiral').name('Spiral').listen().onChange(function(){
     spiral.circle = false;
@@ -220,6 +221,8 @@ function animate() {
     stats.end();
 }
 
+var spiralAngle, wavyAngle, circleRadius;
+
 function animateParticles(){
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     var timeFloatData = new Float32Array(analyser.fftSize);
@@ -290,14 +293,20 @@ function animateParticles(){
     // controls.update();
     camera.updateProjectionMatrix();
     checkVisualizer();
+    // if (spiral.animate){
+    //     checkVisualizer();
+    // }
+    // else if (!spiral.animate){
+    //     clearInterval(wavyAngle);
+    //     clearInterval(circleRadius);
+    //     clearInterval(spiralAngle);
+    // }
 }
 function checkVisualizer(){
-    var spiralAngle, wavyAngle, circleRadius;
     if(spiral.spiral){
-        console.log('hit spiral');
         function changeAngle(){
-            var spiralAngle = window.setInterval(function(){
-                spiral.angle += 0.000001;
+            spiralAngle = window.setInterval(function(){
+                spiral.angle += 0.000005;
             }, 10)
         }
         changeAngle();
@@ -306,7 +315,7 @@ function checkVisualizer(){
     }
     else if (spiral.wavySpiral){
         function changeWavyAngle(){
-            var wavyAngle = window.setInterval(function(){
+            wavyAngle = window.setInterval(function(){
                 if(spiral.wavyAngle <= 2.5){
                     spiral.wavyAngle += 0.00000003;
                 }
@@ -322,8 +331,7 @@ function checkVisualizer(){
     }
     else if (spiral.circle){
         function changeCircleRadius(){
-            console.log('hit circle radius');
-            var circleRadius = window.setInterval(function(){
+            circleRadius = window.setInterval(function(){
                 spiral.radius += 0.001;
             },10)
         }
