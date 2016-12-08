@@ -1,4 +1,4 @@
-console.log('lines loaded');
+// console.log('lines loaded');
 
 var app = app || {};
 app.init = init;
@@ -103,7 +103,6 @@ app.play = true;
         function onKeyDown(e) {
             switch (e.which) {
                 case 32:
-                    console.log(e.which);
                     if (app.play) {
                         app.audio.pause();
                         app.play = false;

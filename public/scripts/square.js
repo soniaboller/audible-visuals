@@ -1,4 +1,4 @@
-console.log('square loaded');
+// console.log('square loaded');
 
 var app = app || {};
 app.init = init;
@@ -14,7 +14,6 @@ var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
 var camera, scene, renderer;
 
 function init() {
-    console.log('init');
     scene = new THREE.Scene();
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -31,33 +30,15 @@ function init() {
     // camera.position.set(0, 0, 75);
 
     renderer.setClearColor(0x000000, 1);
-    // CHANGE THIS into a function with an event lisenter instead
-    window.addEventListener('resize', function () {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        windowHalfX = window.innerWidth / 2;
-        windowHalfY = window.innerHeight / 2;
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-    });
 
     var PI2 = Math.PI * 2;
     particles = new Array();
 
-    // move this into the particle generating loop for color changing, but prevents bottom tiles from being accessed for rotation
-
+    // generates squares in a grid, left to right and top to bottom
     var i = 0;
     for (var iy = 0; iy < yNum; iy++) {
         var material = new THREE.SpriteMaterial({
             color: 0xffffff
-            // program: function ( context ) {
-            //
-            //     context.beginPath();
-            //     context.arc( 0, 0, 0.25, 0, PI2, true );
-            //     context.fill();
-            //
-            // }
         });
         for (var ix = 0; ix < xNum; ix++) {
             var particle = particles[i++] = new THREE.Particle(material);
@@ -99,8 +80,36 @@ function init() {
                     }
                     black = true
                 }
+                break;
+            case 67:
+                if (gui.closed){
+                    gui.closed = false;
+                }
+                else {
+                    gui.closed = true;
+                }
+                break;
+            case 187:
+                if (square.intensity < 15){
+                    square.intensity += 0.1;
+                }
+                break;
+            case 189:
+                if(square.intensity > 5){
+                    square.intensity -= 0.1;
+                }
         }
         return false;
+    }
+
+    function windowResize (){
+        width = window.innerWidth;
+        height = window.innerHeight;
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
     }
 
     function onDocumentMouseMove(e) {
@@ -124,6 +133,7 @@ function init() {
         }
     }
 
+    window.addEventListener('resize', windowResize, false);
     document.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchmove', onDocumentTouchMove, false);
@@ -142,7 +152,6 @@ var GuiControls = function(){
 var square = new GuiControls();
 
 var gui = new dat.GUI();
-console.log(gui);
 gui.closed = true;
 gui.add(square, 'rotation', -0.005, 0.005).name('Rotation');
 gui.add(square, 'intensity', 5, 15);

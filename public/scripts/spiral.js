@@ -1,13 +1,10 @@
-console.log('spiral loaded');
-
-// add a modal that tells user to upload a song
+// console.log('spiral loaded');
 
 var app = app || {};
 app.init = init;
 app.animate = animate;
 // app.play = true;
 app.animateParticles = animateParticles;
-
 
 var mouseX = 0, mouseY = 0,
     windowHalfX = window.innerWidth / 2,
@@ -30,16 +27,6 @@ function init() {
     camera.position.set(0, 0, 175);
 
     renderer.setClearColor(0x000000, 1);
-    // CHANGE THIS into a function with an event lisenter instead
-    window.addEventListener('resize', function () {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        windowHalfX = window.innerWidth / 2;
-        windowHalfY = window.innerHeight / 2;
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-    });
 
     var PI2 = Math.PI * 2;
     particles = new Array();
@@ -55,6 +42,16 @@ function init() {
         });
         var particle = particles[i++] = new THREE.Particle(material);
         scene.add(particle);
+    }
+
+    function windowResize (){
+        width = window.innerWidth;
+        height = window.innerHeight;
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
     }
 
     function onKeyDown(e) {
@@ -110,11 +107,14 @@ function init() {
                 spiral.animate = !spiral.animate;
                 break;
             case 187:
-                spiral.intensity += 0.01;
+                if (spiral.intensity < 1){
+                    spiral.intensity += 0.01;
+                }
                 break;
             case 189:
-                spiral.intensity -= 0.01;
-
+                if (spiral.intensity > 0.05){
+                    spiral.intensity -= 0.01;
+                }
         }
         return false;
     }
@@ -135,6 +135,7 @@ function init() {
         }
     }
 
+    window.addEventListener('resize', windowResize, false);
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
@@ -143,6 +144,7 @@ function init() {
 
 }
 
+// GUI control panel
 var GuiControls = function(){
     this.intensity = 0.25;
     this.toggleRed = true;
@@ -172,6 +174,7 @@ gui.closed = true;
 gui.add(spiral, 'animate').name('ANIMATE');
 gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
 gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
+
 // visualizer type checkboxes
 gui.add(spiral, 'spiral').name('Spiral').listen().onChange(function(){
     spiral.circle = false;
@@ -253,6 +256,7 @@ function animate() {
 }
 
 function animateParticles(){
+    // Fast Fourier Transform (FFT) used to determine waveform
     var timeFrequencyData = new Uint8Array(analyser.fftSize);
     var timeFloatData = new Float32Array(analyser.fftSize);
     analyser.getByteTimeDomainData(timeFrequencyData);
@@ -260,18 +264,21 @@ function animateParticles(){
     for (var j = 0; j <= particles.length; j++){
         particle = particles[j++];
         if (spiral.toggleRed){
+            // forces red by adding the timeFloatData rather than subtracting
             var R = spiral.R + (timeFloatData[j]);
             var G = spiral.G - (timeFloatData[j]);
             var B = spiral.B - (timeFloatData[j]);
             particle.material.color.setRGB(R, G, B);
         }
         else if (spiral.toggleGreen){
+            // forces green by adding the timeFloatData rather than subtracting
             var R = spiral.R - (timeFloatData[j]);
             var G = spiral.G + (timeFloatData[j]);
             var B = spiral.B - (timeFloatData[j]);
             particle.material.color.setRGB(R, G, B);
         }
         else if (spiral.toggleBlue){
+            // forces blue by adding  the timeFloatData rather than subtracting
             var R = spiral.R - (timeFloatData[j]);
             var G = spiral.G - (timeFloatData[j]);
             var B = spiral.B + (timeFloatData[j]);
@@ -280,10 +287,8 @@ function animateParticles(){
         else {
             particle.material.color.setHex(0xffffff);
         }
-        // if (!app.play){
-        //     particle.material.color.setHex(0x000000);
-        // }
         if (spiral.spiral){
+            // Archimedean Spiral
             particle.position.x = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
                                 * Math.sin( ((spiral.angle / 100) * j) );
             particle.position.y = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
@@ -293,6 +298,7 @@ function animateParticles(){
             camera.position.y = 0;
         }
         else if(spiral.wavySpiral){
+            // Archimedean Spiral with sin and cos added respectively to position to create a wavy spiral
             particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
                                 * Math.sin(( (spiral.wavyAngle / 100) * j))
                                 + Math.sin(j / (spiral.wavyAngle / 100));
@@ -311,8 +317,11 @@ function animateParticles(){
             camera.position.y = 100;
         }
     }
-    camera.fov = spiral.fov;
+    // if (!app.play){
+    //     particle.material.color.setHex(0x000000);
+    // }
     // controls.update();
+    camera.fov = spiral.fov;
     camera.updateProjectionMatrix();
 }
 

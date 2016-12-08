@@ -1,4 +1,4 @@
-console.log('waveform loaded');
+// console.log('waveform loaded');
 
 var app = app || {};
 app.init = init;
@@ -107,6 +107,24 @@ function init() {
                 }
                 else {
                     controls.autoRotate = true;
+                }
+                break;
+            case 67:
+                if (gui.closed){
+                    gui.closed = false;
+                }
+                else {
+                    gui.closed = true;
+                }
+                break;
+            case 187:
+                if (waveform.intensity < 4) {
+                    waveform.intensity += 0.5;
+                }
+                break;
+            case 189:
+                if(waveform.intensity > 0.5){
+                    waveform.intensity -= 0.5;
                 }
                 break;
             case 66:

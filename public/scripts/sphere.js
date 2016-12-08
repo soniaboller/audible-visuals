@@ -27,11 +27,6 @@ function init() {
     // controls.autoRotate = true;
     controls.enablePan = false;
     controls.enableKeys = false;
-    // controls.minDistance = 10;
-    // controls.maxDistance = 50;
-    console.log('controls');
-    console.log(controls);
-
 
     // LINES
     lines = new Array();
@@ -52,7 +47,7 @@ function init() {
 
         var line = lines[j++] = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0x000000, opacity: 0.65}));
         scene.add(line);
-        // console.log(lines[2]);
+
     }
 
     function onKeyDown(e) {
@@ -70,6 +65,24 @@ function init() {
                 break;
             case 66:
                 controls.reset();
+                break;
+            case 67:
+                if (gui.closed){
+                    gui.closed = false;
+                }
+                else {
+                    gui.closed = true;
+                }
+                break;
+            case 187:
+                if (sphere.intensity < 12){
+                    sphere.intensity += 0.1;
+                }
+                break;
+            case 189:
+                if (sphere.intensity > 4){
+                    sphere.intensity -= 0.1;
+                }
         }
         return false;
     }
