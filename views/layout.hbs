@@ -1,6 +1,6 @@
 <html>
   <head>
-      <title>{{title}}</title>
+      <title>Audible Visuals: {{title}}</title>
       <link rel='stylesheet' href='/styles/main.css' />
       <meta http-equiv="Cache-control" content="no-store"/>
       <meta http-equiv="Cache-control" content="no-cache"/>
@@ -48,7 +48,6 @@
       }
       document.addEventListener('keydown', onKeyDown, false);
       $('#notification').velocity('fadeIn', { delay: 150, duration: 1500 });
-
       var stats = new Stats();
       stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild( stats.dom );

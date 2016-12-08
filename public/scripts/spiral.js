@@ -105,14 +105,19 @@ function init() {
                 spiral.toggleRed = false;
                 spiral.toggleGreen = false;
                 spiral.toggleBlue = true;
+                break;
+            case 65:
+                spiral.animate = !spiral.animate;
+                break;
+            case 187:
+                spiral.intensity += 0.01;
+                break;
+            case 189:
+                spiral.intensity -= 0.01;
+
         }
         return false;
     }
-
-    // function onDocumentMouseMove(e) {
-    //     mouseX = e.clientX - windowHalfX;
-    //     mouseY = e.clientY - windowHalfY;
-    // }
 
     function onDocumentTouchStart(e) {
         if (e.touches.length === 1) {
@@ -130,7 +135,6 @@ function init() {
         }
     }
 
-    // document.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
@@ -158,7 +162,7 @@ var GuiControls = function(){
     this.spiral = true;
     this.wavySpiral = false;
     this.circle = false;
-    this.animate = true;
+    this.animate = false;
 };
 
 var spiral = new GuiControls();
@@ -313,7 +317,7 @@ function animateParticles(){
 }
 
 function checkVisualizer(){
-    if(spiral.animate && app.play){
+    if(spiral.animate){
         if(spiral.spiral){
             changeAngle();
         }
@@ -367,7 +371,7 @@ function changeCircleRadius(){
         }
         else {
             spiral.radius -= 0.05;
-            if (spiral.radius <= 30){
+            if (spiral.radius <= 35){
                 console.log('hit');
                 app.circleCounter = true;
             }
