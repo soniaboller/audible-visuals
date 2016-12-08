@@ -244,12 +244,12 @@ colorFolder.open();
 
 function animate() {
     app.animationFrame = (window.requestAnimationFrame || window.webkitRequestAnimationFrame)(app.animate);
-    stats.begin();
+    // stats.begin();
     animateParticles();
     checkVisualizer();
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
-    stats.end();
+    // stats.end();
 }
 
 function animateParticles(){
