@@ -1,5 +1,4 @@
 var app = app || {};
-var ctx;
 var source;
 var buffer;
 var analyser;
