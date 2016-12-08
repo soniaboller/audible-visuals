@@ -243,7 +243,6 @@ function animate() {
     stats.begin();
     animateParticles();
     checkVisualizer();
-
     camera.lookAt( scene.position );
     renderer.render( scene, camera );
     stats.end();
@@ -310,94 +309,67 @@ function animateParticles(){
     }
     camera.fov = spiral.fov;
     // controls.update();
-    // spiral.angle += 0.0008;
-    // spiral.wavyAngle += 0.000004;
-    // spiral.radius += 0.05;
     camera.updateProjectionMatrix();
 }
 
 function checkVisualizer(){
-    if(spiral.animate){
+    if(spiral.animate && app.play){
         if(spiral.spiral){
             changeAngle();
-            window.clearInterval(app.wavyAngle);
-            window.clearInterval(app.circleRadius);
         }
         else if (spiral.wavySpiral){
             changeWavyAngle();
-            window.clearInterval(app.spiralAngle);
-            window.clearInterval(app.circleRadius);
         }
         else if (spiral.circle){
             changeCircleRadius();
-            window.clearInterval(app.wavyAngle);
-            window.clearInterval(app.spiralAngle);
         }
     }
-    // else {
-    //     window.clearInterval(app.spiralAngle);
-    //     window.clearInterval(app.wavyAngle);
-    //     window.clearInterval(app.circleRadius);
-    //     // stopRotation(app.spiralAngle);
-    //     // stopRotation(app.wavyAngle);
-    //     // stopRotation(app.circleRadius);
-    //     // app.spiralAngle = 0;
-    //     // app.wavyAngle = 0;
-    //     // app.circleRadius = 0;
-    // }
 }
+
+app.spiralCounter = true;
+app.wavySpiralCounter = true;
+app.circleCounter = true;
+
 function changeAngle(){
-    countUp = true;
-    // app.spiralAngle = window.setInterval(function(){
-        if (countUp){
+        if (app.spiralCounter){
             spiral.angle += 0.0008;
             if (spiral.angle >= 13){
-                countUp = false;
+                app.spiralCounter = false;
             }
         }
         else {
             spiral.angle -= 0.0008;
             if(spiral.angle <= 9){
-                countUp = true;
+                app.spiralCounter = true;
             }
         }
-    // }, 10)
 }
 function changeWavyAngle(){
-    countUp = true;
-    // app.wavyAngle = window.setInterval(function(){
-        if (countUp){
+        if (app.wavySpiralCounter){
             spiral.wavyAngle += 0.000004;
             if (spiral.wavyAngle >= 2.48){
-                countUp = false;
+                app.wavySpiralCounter = false;
             }
         }
         else {
             spiral.wavyAngle -= 0.000006;
             if (spiral.wavyAngle <= 2.43){
-                countUp = true;
+                app.wavySpiralCounter = true;
             }
         }
-    // }, 10);
 }
 function changeCircleRadius(){
-    countUp = true;
-    // app.circleRadius = window.setInterval(function(){
-        if (countUp){
+        if (app.circleCounter){
             spiral.radius += 0.05;
             if (spiral.radius >= 65){
-                countUp = false;
+                app.circleCounter = false;
             }
         }
         else {
             spiral.radius -= 0.05;
-            if (spiral.radius <= 15){
-                countUp = true;
+            if (spiral.radius <= 30){
+                console.log('hit');
+                app.circleCounter = true;
             }
         }
-    // }, 10)
-}
-
-function stopRotation(animation){
-    clearInterval(animation)
 }
