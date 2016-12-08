@@ -4,3 +4,7 @@ public/media/*
 
 node_modules
 jspm_packages
+
+public/scripts/app.js
+public/scripts/plane.js
+public/scripts/plane2.js
