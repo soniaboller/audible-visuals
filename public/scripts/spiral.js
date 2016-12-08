@@ -289,7 +289,7 @@ function animateParticles(){
             particle.position.y = (spiral.a + spiral.b * ((spiral.angle / 100) * j ))
                                 * Math.cos( ((spiral.angle / 100) * j) );
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
-            // counter clockwise if x = cos and y = sin, clockwise if x = sin and y = cos
+
             camera.position.y = 0;
         }
         else if(spiral.wavySpiral){
