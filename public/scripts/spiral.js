@@ -177,7 +177,7 @@ var GuiControls = function(){
     this.wavySpiral = true;
     this.flower = false;
     this.circle = false;
-    this.animate = false;
+    this.animate = true;
 };
 
 var spiral = new GuiControls();
@@ -452,3 +452,5 @@ function changeCircleRadius(){
             }
         }
 }
+
+console.log("'1', '2', '3', and '4' toggle visualizers \n'r', 'g', 'b' toggle colors \n'a' toggles animation \n'space' toggles playback \n'c' toggles controls");
