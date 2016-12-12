@@ -161,8 +161,8 @@ var GuiControls = function(){
     this.aWavy = 1.20;
     this.bWavy = 0.76;
     this.wavyAngle = 2.44;
-    this.spiral = true;
-    this.wavySpiral = false;
+    this.spiral = false;
+    this.wavySpiral = true;
     this.circle = false;
     this.animate = false;
 };
@@ -207,13 +207,13 @@ var spiralFolder = gui.addFolder('Spiral Controls');
 spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Inner Radius');
 spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Outer Radius');
 spiralFolder.add(spiral,'angle', 0, 50).step(.01).name('Angle');
-spiralFolder.open();
+// spiralFolder.open();
 
 var wavySpiralFolder = gui.addFolder('Wavy Spiral Controls');
 wavySpiralFolder.add(spiral,'aWavy', 0, 50).step(0.01).name('Inner Radius');
 wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
 wavySpiralFolder.add(spiral,'wavyAngle', 1, 4).step(0.01).name('Angle');
-// wavySpiralFolder.open();
+wavySpiralFolder.open();
 
 var circleFolder = gui.addFolder('Cricle Controls');
 circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
@@ -297,18 +297,22 @@ function animateParticles(){
 
             camera.position.y = 0;
         }
+
         else if(spiral.wavySpiral){
             // Archimedean Spiral with sin and cos added respectively to position to create a wavy spiral
+
+            // * 5 for starfish?
             particle.position.x = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
                                 * Math.sin(( (spiral.wavyAngle / 100) * j))
-                                + Math.sin(j / (spiral.wavyAngle / 100));
+                                + 5* Math.sin(j / (spiral.wavyAngle / 100));
             particle.position.y = (spiral.aWavy + spiral.bWavy * ((spiral.wavyAngle / 100) * j))
                                 * Math.cos(( (spiral.wavyAngle / 100) * j))
-                                + Math.cos(j / (spiral.wavyAngle / 100));
+                                + 5* Math.cos(j / (spiral.wavyAngle / 100));
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
 
             camera.position.y = 0;
         }
+
         else if (spiral.circle){
             particle.position.x = Math.sin(j) * (j / (j/spiral.radius));
             particle.position.y = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
