@@ -13,7 +13,8 @@ Drag and drop a song from your computer and visualize the tunes. Visualizations 
 * 'space' : starts and stops song
 * '1' : spiral visualizer 
 * '2' : wavy spiral visualizer 
-* '3' : circle visualizer 
+* '3' : flower visualizer 
+* '4' : circle visualizer 
 * 'r' : emphasizes red in the visualizer
 * 'g' : emphasizes green in the visualizer
 * 'b' : emphasizes blue in the visualizer
