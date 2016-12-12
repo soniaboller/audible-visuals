@@ -21,6 +21,10 @@ audioCtrl.get('/', function(req, res, next) {
   res.render('spiral',{ title: 'SPIRAL'});
 });
 
+audioCtrl.get('/test', function(req, res, next) {
+  res.render('test',{ title: 'test'});
+});
+
 
 audioCtrl.get('/plane', function(req, res, next) {
   res.render('plane',{ title: 'PLANE'});

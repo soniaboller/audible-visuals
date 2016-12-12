@@ -80,16 +80,25 @@ function init() {
                 spiral.spiral = true;
                 spiral.wavySpiral = false;
                 spiral.circle = false;
+                spiral.flower = false;
                 break;
             case 50:
                 spiral.spiral = false;
                 spiral.wavySpiral = true;
                 spiral.circle = false;
+                spiral.flower = false;
                 break;
             case 51:
                 spiral.spiral = false;
                 spiral.wavySpiral = false;
+                spiral.circle = false;
+                spiral.flower = true;
+                break;
+            case 52:
+                spiral.spiral = false;
+                spiral.wavySpiral = false;
                 spiral.circle = true;
+                spiral.flower = false;
                 break;
             case 82:
                 spiral.toggleRed = true;
@@ -139,7 +148,7 @@ function init() {
     document.addEventListener('touchmove', onDocumentTouchMove, false);
     document.addEventListener('keydown', onKeyDown, false);
 
-    // controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 }
 
@@ -159,8 +168,12 @@ var GuiControls = function(){
     this.aWavy = 1.20;
     this.bWavy = 0.76;
     this.wavyAngle = 2.44;
-    this.spiral = true;
-    this.wavySpiral = false;
+    this.aFlower = 15.5;
+    this.bFlower = 0;
+    this.flowerAngle = 2.19;
+    this.spiral = false;
+    this.wavySpiral = true;
+    this.flower = false;
     this.circle = false;
     this.animate = false;
 };
@@ -174,37 +187,54 @@ gui.add(spiral, 'intensity', 0.05, 1).name('Intensity');
 gui.add(spiral, 'fov', 1, 150).name('Zoom Distance');
 // visualizer type checkboxes
 gui.add(spiral, 'spiral').name('Spiral').listen().onChange(function(){
-    spiral.circle = false;
     spiral.spiral = true;
     spiral.wavySpiral = false;
+    spiral.flower = false;
+    spiral.circle = false;
     spiralFolder.open();
-    circleFolder.close();
     wavySpiralFolder.close();
+    flowerFolder.close();
+    circleFolder.close();
 
 });
 gui.add(spiral, 'wavySpiral').name('Wavy Spiral').listen().onChange(function(){
-    spiral.circle = false;
     spiral.spiral = false;
     spiral.wavySpiral = true;
+    spiral.flower = false;
+    spiral.circle = false;
     spiralFolder.close();
-    circleFolder.close();
     wavySpiralFolder.open();
+    flowerFolder.close();
+    circleFolder.close();
 });
-gui.add(spiral, 'circle').name('Circle').listen().onChange(function(){
-    spiral.circle = true;
+gui.add(spiral, 'flower').name('Flower').listen().onChange(function(){
     spiral.spiral = false;
     spiral.wavySpiral = false;
+    spiral.flower = true;
+    spiral.circle = false;
     spiralFolder.close();
-    circleFolder.open();
     wavySpiralFolder.close();
+    flowerFolder.open();
+    circleFolder.close();
 });
+gui.add(spiral, 'circle').name('Circle').listen().onChange(function(){
+    spiral.spiral = false;
+    spiral.wavySpiral = false;
+    spiral.flower = false;
+    spiral.circle = true;
+    spiralFolder.close();
+    wavySpiralFolder.close();
+    flowerFolder.close();
+    circleFolder.open();
+});
+
 
 // selected visualizer controls folder
 var spiralFolder = gui.addFolder('Spiral Controls');
 spiralFolder.add(spiral,'a', 0, 50).step(0.01).name('Inner Radius');
 spiralFolder.add(spiral,'b', 0, 5).step(0.01).name('Outer Radius');
 spiralFolder.add(spiral,'angle', 0, 50).step(.01).name('Angle');
-spiralFolder.open();
+// spiralFolder.open();
 
 var wavySpiralFolder = gui.addFolder('Wavy Spiral Controls');
 wavySpiralFolder.add(spiral,'aWavy', 0, 50).step(0.01).name('Inner Radius');
@@ -212,8 +242,14 @@ wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
 wavySpiralFolder.add(spiral,'wavyAngle', 1, 4).step(0.01).name('Angle');
 // wavySpiralFolder.open();
 
+var flowerFolder = gui.addFolder('Star Controls');
+flowerFolder.add(spiral,'aFlower', 0, 50).step(0.01).name('Inner Radius');
+flowerFolder.add(spiral,'bFlower', 0, 3).step(0.01).name('Outer Radius');
+flowerFolder.add(spiral,'flowerAngle', 1, 4).step(0.01).name('Angle');
+
 var circleFolder = gui.addFolder('Cricle Controls');
 circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
+
 
 // color emphasis checkbox
 gui.add(spiral, 'toggleRed').name('Red Emphasis').listen().onChange(function(){
@@ -303,6 +339,16 @@ function animateParticles(){
 
             camera.position.y = 0;
         }
+        else if(spiral.flower){
+            particle.position.x = (spiral.aFlower + spiral.bFlower * ((spiral.flowerAngle / 100) * j))
+                                * Math.cos(( (spiral.flowerAngle / 100) * j))
+                                + Math.sin(j / (spiral.flowerAngle / 100)) * 25;
+            particle.position.y = (spiral.aFlower + spiral.bFlower * ((spiral.flowerAngle / 100) * j))
+                                * Math.sin(( (spiral.flowerAngle / 100) * j))
+                                + Math.cos(j / (spiral.flowerAngle / 100)) * 25;
+            particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
+            camera.position.y = 0;
+        }
         else if (spiral.circle){
             particle.position.x = Math.sin(j) * (j / (j/spiral.radius));
             particle.position.y = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
@@ -312,7 +358,7 @@ function animateParticles(){
         }
     }
     camera.fov = spiral.fov;
-    // controls.update();
+    controls.update();
     camera.updateProjectionMatrix();
 }
 
@@ -324,6 +370,9 @@ function checkVisualizer(){
         else if (spiral.wavySpiral){
             changeWavyAngle();
         }
+        else if (spiral.flower){
+            changeFlowerAngle();
+        }
         else if (spiral.circle){
             changeCircleRadius();
         }
@@ -333,6 +382,7 @@ function checkVisualizer(){
 app.spiralCounter = true;
 app.wavySpiralCounter = true;
 app.circleCounter = true;
+app.flowerCounter = false;
 
 function changeAngle(){
         if (app.spiralCounter){
@@ -361,6 +411,20 @@ function changeWavyAngle(){
                 app.wavySpiralCounter = true;
             }
         }
+}
+function changeFlowerAngle(){
+    if (app.flowerCounter){
+        spiral.flowerAngle += 0.0000004;
+        if (spiral.flowerAngle >= 2.19){
+            app.flowerCounter = false;
+        }
+    }
+    else {
+        spiral.flowerAngle -= 0.0000004;
+        if (spiral.flowerAngle <= 2.15){
+            app.flowerCounter = true;
+        }
+    }
 }
 function changeCircleRadius(){
         if (app.circleCounter){
