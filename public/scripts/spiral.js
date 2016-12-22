@@ -155,7 +155,7 @@ function init() {
 
 // GUI control panel
 var GuiControls = function(){
-    this.intensity = 0.25;
+    this.intensity = 0.18;
     this.toggleRed = true;
     this.toggleGreen = false;
     this.toggleBlue = false;
