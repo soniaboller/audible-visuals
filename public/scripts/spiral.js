@@ -170,9 +170,9 @@ var GuiControls = function(){
     this.aWavy = 1.20;
     this.bWavy = 0.76;
     this.wavyAngle = 2.44;
-    this.aFlower = 15.5;
+    this.aFlower = 25;
     this.bFlower = 0;
-    this.flowerAngle = 2.19;
+    this.flowerAngle = 2.86;
     this.spiral = false;
     this.wavySpiral = true;
     this.flower = false;
@@ -245,7 +245,7 @@ wavySpiralFolder.add(spiral,'bWavy', 0, 3).step(0.01).name('Outer Radius');
 wavySpiralFolder.add(spiral,'wavyAngle', 1, 4).step(0.01).name('Angle');
 wavySpiralFolder.open();
 
-var flowerFolder = gui.addFolder('Star Controls');
+var flowerFolder = gui.addFolder('Flower Controls');
 flowerFolder.add(spiral,'aFlower', 0, 50).step(0.01).name('Inner Radius');
 flowerFolder.add(spiral,'bFlower', 0, 3).step(0.01).name('Outer Radius');
 flowerFolder.add(spiral,'flowerAngle', 1, 4).step(0.01).name('Angle');
@@ -350,10 +350,10 @@ function animateParticles(){
         else if(spiral.flower){
             particle.position.x = (spiral.aFlower + spiral.bFlower * ((spiral.flowerAngle / 100) * j))
                                 * Math.cos(( (spiral.flowerAngle / 100) * j))
-                                + Math.sin(j / (spiral.flowerAngle / 100)) * 25;
+                                + Math.sin(j / (spiral.flowerAngle / 100)) * 17;
             particle.position.y = (spiral.aFlower + spiral.bFlower * ((spiral.flowerAngle / 100) * j))
                                 * Math.sin(( (spiral.flowerAngle / 100) * j))
-                                + Math.cos(j / (spiral.flowerAngle / 100)) * 25;
+                                + Math.cos(j / (spiral.flowerAngle / 100)) * 17;
             particle.position.z = (timeFloatData[j] * timeFrequencyData[j] * spiral.intensity);
             camera.position.y = 0;
         }
@@ -426,13 +426,13 @@ function changeWavyAngle(){
 function changeFlowerAngle(){
     if (app.flowerCounter){
         spiral.flowerAngle += 0.0000004;
-        if (spiral.flowerAngle >= 2.19){
+        if (spiral.flowerAngle >= 2.87){
             app.flowerCounter = false;
         }
     }
     else {
         spiral.flowerAngle -= 0.0000004;
-        if (spiral.flowerAngle <= 2.15){
+        if (spiral.flowerAngle <= 2.85){
             app.flowerCounter = true;
         }
     }
