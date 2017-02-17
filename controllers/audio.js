@@ -5,7 +5,7 @@ audioCtrl.get('/waveform', function(req, res, next) {
   res.render('waveform',{ title: 'WAVVEZ'});
 });
 
-audioCtrl.get('/sphere', function(req, res, next) {
+audioCtrl.get('/', function(req, res, next) {
   res.render('sphere',{ title: 'SPHERE'});
 });
 
@@ -17,9 +17,9 @@ audioCtrl.get('/line', function(req, res, next) {
   res.render('lines',{ title: 'LINE'});
 });
 
-audioCtrl.get('/', function(req, res, next) {
-  res.render('spiral',{ title: 'SPIRAL'});
-});
+// audioCtrl.get('/', function(req, res, next) {
+//   res.render('spiral',{ title: 'SPIRAL'});
+// });
 
 audioCtrl.get('/test', function(req, res, next) {
   res.render('test',{ title: 'test'});
