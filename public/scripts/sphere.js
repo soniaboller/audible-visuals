@@ -99,7 +99,7 @@ var GuiControls = function(){
     this.middleColor = 0xFF0000;
     this.outerColor = 0xFF0080;
     this.intensity = 5;
-    this.opacity = 0.65;
+    this.opacity = 0.85;
 };
 
 var sphere = new GuiControls();
