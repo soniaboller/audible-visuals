@@ -250,7 +250,7 @@ flowerFolder.add(spiral,'aFlower', 0, 50).step(0.01).name('Inner Radius');
 flowerFolder.add(spiral,'bFlower', 0, 3).step(0.01).name('Outer Radius');
 flowerFolder.add(spiral,'flowerAngle', 1, 4).step(0.01).name('Angle');
 
-var circleFolder = gui.addFolder('Cricle Controls');
+var circleFolder = gui.addFolder('Circle Controls');
 circleFolder.add(spiral, 'radius', 10, 100).name('Radius');
 
 
